@@ -1,0 +1,16 @@
+network_params:
+  bpo_1_epoch: 10
+  bpo_1_max_blobs: 15
+  bpo_1_target_blobs: 10
+  bpo_2_epoch: 20
+  bpo_2_max_blobs: 21
+  bpo_2_target_blobs: 14
+  bpo_3_epoch: 30
+  bpo_3_max_blobs: 33
+  bpo_3_target_blobs: 22
+  bpo_4_epoch: 40
+  bpo_4_max_blobs: 48
+  bpo_4_target_blobs: 32
+  bpo_5_epoch: 50
+  bpo_5_max_blobs: 72
+  bpo_5_target_blobs: 48
