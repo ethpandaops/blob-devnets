@@ -65,3 +65,6 @@ checkpointz:
         - name: prysm-reth-super-1
           address: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
           dataProvider: true
+        - name: teku-geth-super-1
+          address: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
+          dataProvider: true

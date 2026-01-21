@@ -55,3 +55,5 @@ dugtrio:
     name: prysm-nethermind-super-1
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-reth-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
+    name: teku-geth-super-1

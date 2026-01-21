@@ -244,9 +244,9 @@ variable "nimbus_nimbusel_super" {
 variable "teku_geth_super" {
   default = {
     name            = "teku-geth-super"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 64
+    validator_end   = 400
   }
 }
 

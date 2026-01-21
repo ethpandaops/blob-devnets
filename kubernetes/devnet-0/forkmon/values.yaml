@@ -43,6 +43,8 @@ forkmon:
     name: prysm-nethermind-super-1
   - addr: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-reth-super-1
+  - addr: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
+    name: teku-geth-super-1
 
   config: |
     # How often to reload data from the nodes

@@ -73,6 +73,9 @@ assertoor:
     - name:  prysm-reth-super-1
       executionUrl: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
       consensusUrl: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
+    - name:  teku-geth-super-1
+      executionUrl: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
+      consensusUrl: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
 
   validatorNamesInventory: https://config.blob-devnet-0.ethpandaops.io/api/v1/nodes/validator-ranges
   globalVariables:
@@ -87,6 +90,7 @@ assertoor:
       - prysm-geth-full-1
       - prysm-nethermind-super-1
       - prysm-reth-super-1
+      - teku-geth-super-1
     validatorPairNames:
       - lighthouse-besu-super-1
       - lighthouse-erigon-full-1
@@ -95,5 +99,6 @@ assertoor:
       - prysm-geth-full-1
       - prysm-nethermind-super-1
       - prysm-reth-super-1
+      - teku-geth-super-1
 
   assertoorTests: []
