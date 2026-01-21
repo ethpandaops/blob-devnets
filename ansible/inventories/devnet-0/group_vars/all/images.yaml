@@ -1,18 +1,18 @@
 default_ethereum_client_images:
   ### Consensus layer clients
-  lighthouse: sigp/lighthouse:latest
+  lighthouse: ethpandaops/lighthouse:dknopik-partial-columns
   lodestar: chainsafe/lodestar:latest
   nimbus: statusim/nimbus-eth2:multiarch-latest
-  prysm: gcr.io/offchainlabs/prysm/beacon-chain:latest
+  prysm: ethpandaops/prysm-beacon-chain:marcopolo-partial-columns
   prysm_validator: gcr.io/offchainlabs/prysm/validator:latest
   teku: consensys/teku:latest
   grandine: ethpandaops/grandine:develop
   ### Execution layer clients
-  besu: hyperledger/besu:latest
-  geth: ethereum/client-go:stable
-  erigon: erigontech/erigon:main-latest
-  nethermind: nethermindeth/nethermind:master
-  reth: ghcr.io/paradigmxyz/reth:latest
+  besu: ethpandaops/besu:main
+  geth: ethpandaops/geth:master
+  erigon: ethpandaops/erigon:main
+  nethermind: ethpandaops/nethermind:master
+  reth: ethpandaops/reth:main
   nimbusel: ethpandaops/nimbus-eth1:master
 
 default_tooling_images:

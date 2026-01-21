@@ -2,7 +2,7 @@
 variable "bootnode" {
   default = {
     name            = "bootnode"
-    count           = 0
+    count           = 1
     validator_start = 0
     validator_end   = 0
   }
@@ -14,7 +14,7 @@ variable "mev_relay" {
     count           = 1
     validator_start = 0
     validator_end   = 0
-    size            = "ccx53"
+    size            = "cx53"
     supernode       = true
   }
 }
@@ -25,17 +25,17 @@ variable "lighthouse_geth_super" {
   default = {
     name            = "lighthouse-geth-super"
     count           = 1
-    validator_start = 200
-    validator_end   = 300
+    validator_start = 0
+    validator_end   = 8
   }
 }
 
 variable "lighthouse_besu_super" {
   default = {
     name            = "lighthouse-besu-super"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 8
+    validator_end   = 16
   }
 }
 
@@ -97,9 +97,9 @@ variable "prysm_besu_super" {
 variable "prysm_nethermind_super" {
   default = {
     name            = "prysm-nethermind-super"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 16
+    validator_end   = 24
   }
 }
 
@@ -115,9 +115,9 @@ variable "prysm_erigon_super" {
 variable "prysm_reth_super" {
   default = {
     name            = "prysm-reth-super"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 24
+    validator_end   = 32
   }
 }
 
@@ -356,9 +356,9 @@ variable "grandine_nimbusel_super" {
 variable "lighthouse_geth_full" {
   default = {
     name            = "lighthouse-geth-full"
-    count           = 1
-    validator_start = 300
-    validator_end   = 400
+    count           = 0
+    validator_start = 0
+    validator_end   = 0
   }
 }
 
@@ -383,9 +383,9 @@ variable "lighthouse_nethermind_full" {
 variable "lighthouse_erigon_full" {
   default = {
     name            = "lighthouse-erigon-full"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 32
+    validator_end   = 40
   }
 }
 
@@ -401,9 +401,9 @@ variable "lighthouse_reth_full" {
 variable "lighthouse_nimbusel_full" {
   default = {
     name            = "lighthouse-nimbusel-full"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 40
+    validator_end   = 48
   }
 }
 
@@ -411,18 +411,18 @@ variable "lighthouse_nimbusel_full" {
 variable "prysm_geth_full" {
   default = {
     name            = "prysm-geth-full"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 48
+    validator_end   = 56
   }
 }
 
 variable "prysm_besu_full" {
   default = {
     name            = "prysm-besu-full"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 1
+    validator_start = 56
+    validator_end   = 64
   }
 }
 

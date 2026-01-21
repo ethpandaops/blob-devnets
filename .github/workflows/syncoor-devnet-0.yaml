@@ -97,7 +97,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        network: ["template-devnet-0"]
+        network: ["blob-devnet-0"]
         el-client: >-
           ${{
             fromJSON(format('[{0}]', inputs.el-client || '
