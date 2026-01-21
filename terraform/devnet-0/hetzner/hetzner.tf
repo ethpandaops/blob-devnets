@@ -31,7 +31,7 @@ variable "hetzner_regions" {
   default = [
     #"hel1",
     "fsn1"
-#    "nbg1"
+    #    "nbg1"
   ]
 }
 
