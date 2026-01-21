@@ -145,6 +145,16 @@ tracoor-single:
             traceDisableMemory: true
             traceDisableStack: true
             traceDisableStorage: true
+      - name: mev-relay-1
+        ethereum:
+          overrideNetworkName: blob-devnet-0
+          beacon:
+            nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
+          execution:
+            nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
+            traceDisableMemory: true
+            traceDisableStack: true
+            traceDisableStorage: true
       - name: prysm-besu-full-1
         ethereum:
           overrideNetworkName: blob-devnet-0

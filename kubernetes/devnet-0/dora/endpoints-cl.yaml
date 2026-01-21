@@ -30,6 +30,10 @@
   authGroup: pandaops
   priority: -1
   archive: true
+- url: https://bn-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
+  name: mev-relay-1
+  authGroup: pandaops
+  priority: -1
 - url: https://bn-prysm-besu-full-1.srv.blob-devnet-0.ethpandaops.io
   name: prysm-besu-full-1
   authGroup: pandaops

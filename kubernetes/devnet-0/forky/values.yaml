@@ -102,6 +102,11 @@ forky:
           config:
             address: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
             polling_interval: "12s"
+        - name: mev-relay-1
+          type: "beacon_node"
+          config:
+            address: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
+            polling_interval: "12s"
         - name: prysm-besu-full-1
           type: "beacon_node"
           config:

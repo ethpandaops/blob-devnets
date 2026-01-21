@@ -35,6 +35,8 @@ forkmon:
     name: lighthouse-geth-super-1
   - addr: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-nimbusel-full-1
+  - addr: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
+    name: mev-relay-1
   - addr: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-besu-full-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-besu-full-1
   - addr: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-geth-full-1.srv.blob-devnet-0.ethpandaops.io
