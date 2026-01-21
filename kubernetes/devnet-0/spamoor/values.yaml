@@ -1,0 +1,49 @@
+# Ansible managed. Don't change this file manually. Template info: /vendor/collections/ansible_collections/ethpandaops/general/roles/generate_kubernetes_config/templates/spamoor.yaml.j2
+
+spamoor:
+  fullnameOverride: spamoor
+  image:
+    repository: ethpandaops/spamoor
+    tag: master-latest
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 250m
+      memory: 500Mi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+  ingress:
+    enabled: true
+    className: ingress-nginx-public
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        sub_filter '</head>' '<script src="https://pandamenu.ethpandaops.io/panda-menu-1.0.0.js" integrity="sha384-j6D+DanVUQs7XYmJaMXGwg2VdBq07F/ekc+bP5CNPsLOYCv4TKf8r3JBWqxwakKL" crossorigin="anonymous"></script></head>';
+        sub_filter_types text/html;
+        sub_filter_once off;
+    hosts:
+      - host: spamoor.blob-devnet-0.ethpandaops.io
+        paths:
+          - path: /
+            pathType: Prefix
+
+  customArgs:
+    - --fulu-activation=1769027354
+
+  persistence:
+    enabled: true
+
+  privateKey: "<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.spamoor_private_key}>"
+  rpcEndpoints:
+  # Rpc
+  - "http://geth-prysm-001:8545"
+  - "group(bootnode-1)name(bootnode-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-bootnode-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(lighthouse,besu,super,1,lighthouse-besu-super-1)name(lighthouse-besu-super-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-besu-super-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(lighthouse,erigon,full,1,lighthouse-erigon-full-1)name(lighthouse-erigon-full-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-erigon-full-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(lighthouse,geth,super,1,lighthouse-geth-super-1)name(lighthouse-geth-super-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-geth-super-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(lighthouse,nimbusel,full,1,lighthouse-nimbusel-full-1)name(lighthouse-nimbusel-full-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(prysm,besu,full,1,prysm-besu-full-1)name(prysm-besu-full-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-besu-full-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(prysm,geth,full,1,prysm-geth-full-1)name(prysm-geth-full-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-geth-full-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(prysm,nethermind,super,1,prysm-nethermind-super-1)name(prysm-nethermind-super-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io"
+  - "group(prysm,reth,super,1,prysm-reth-super-1)name(prysm-reth-super-1)https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io"

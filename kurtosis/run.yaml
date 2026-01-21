@@ -1,16 +1,47 @@
+participants_matrix:
+  el:
+    - el_type: geth
+      el_image: ethpandaops/geth:master
+    - el_type: nethermind
+      el_image: ethpandaops/nethermind:master
+    - el_type: reth
+      el_image: ethpandaops/reth:main
+    - el_type: erigon
+      el_image: ethpandaops/erigon:main
+
+
+  cl:
+    - cl_type: lighthouse
+      cl_image: ethpandaops/lighthouse:dknopik-partial-columns
+      validator_count: 16
+    - cl_type: prysm
+      cl_image: ethpandaops/prysm-beacon-chain:marcopolo-partial-columns
+      validator_count: 16
+      cl_extra_params:
+      - "--partial-data-columns"
+    - cl_type: teku
+      cl_image: ethpandaops/teku:master
+
 network_params:
-  bpo_1_epoch: 10
-  bpo_1_max_blobs: 15
-  bpo_1_target_blobs: 10
-  bpo_2_epoch: 20
-  bpo_2_max_blobs: 21
-  bpo_2_target_blobs: 14
-  bpo_3_epoch: 30
-  bpo_3_max_blobs: 33
-  bpo_3_target_blobs: 22
-  bpo_4_epoch: 40
-  bpo_4_max_blobs: 48
-  bpo_4_target_blobs: 32
-  bpo_5_epoch: 50
-  bpo_5_max_blobs: 72
-  bpo_5_target_blobs: 48
+  prefunded_accounts: '{"0xb9e79d19f651a941757b35830232e7efc77e1c79": {"balance": "100000ETH"}}'
+snooper_enabled: false
+additional_services:
+  - dora
+  - spamoor
+global_log_level: debug
+spamoor_params:
+  spammers:
+    - scenario: blob-combined
+      name: blob spammer for mev builder
+      config:
+        throughput: 6
+        sidecars: 1
+        client_group: "mevbuilder"
+    - scenario: blob-combined
+      name: blob spammer
+      config:
+        throughput: 6
+        sidecars: 1
+mev_type: flashbots
+mev_params:
+  mev_builder_subsidy: 1

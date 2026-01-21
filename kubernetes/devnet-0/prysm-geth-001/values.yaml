@@ -1,0 +1,248 @@
+# Ansible managed. Don't change this file manually. Template info: /vendor/collections/ansible_collections/ethpandaops/general/roles/generate_kubernetes_config/templates/ethereum-node.yaml.j2
+
+prysm-geth-001:
+  global:
+    main:
+      network: blob-devnet-0
+      engineEndpoint: http://geth-prysm-001:8551
+      rpcEndpoint: http://geth-prysm-001:8545
+      beaconEndpoint: http://prysm-geth-001:5052
+    checkpointSync:
+      enabled: false
+      addresses:
+        blob-devnet-0: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-bootnode-1.blob-devnet-0.ethpandaops.io
+    clientArgs:
+      networks:
+        blob-devnet-0:
+          execution:
+            besu:
+              - --genesis-file=/data/network-config/besu.json
+              - --bootnodes=enode://94b94333f62c673cc7bcc3d6578d8a19ac32b2aad047254f4f4076d5d71591073d3091a4d1b0e308de340f77ff0bcf64294a6fef974aa1b21ebeea5ac6f21e73@49.13.16.165:9010,enode://cf62d5ca87d8b23a76350ee4f42a1c2378a603a0340193451f7a6de61b4c3829b66ba64e72fc72f853925755e5a0ff4a48b29886289b60bd5ae91bf656084f78@49.13.16.165:30303?discport=30303
+              - --rpc-http-api=ADMIN,DEBUG,ETH,MINER,NET,TRACE,TXPOOL,WEB3
+              - --sync-mode=FULL
+              - --data-storage-format=BONSAI
+              - --bonsai-limit-trie-logs-enabled=false
+            nethermind:
+              - --Init.ChainSpecPath=/data/network-config/chainspec.json
+              - --JsonRpc.EnabledModules=Eth,Subscribe,Trace,TxPool,Web3,Personal,Proof,Net,Parity,Health,Rpc,Debug,Admin
+              - --Discovery.Bootnodes=enode://94b94333f62c673cc7bcc3d6578d8a19ac32b2aad047254f4f4076d5d71591073d3091a4d1b0e308de340f77ff0bcf64294a6fef974aa1b21ebeea5ac6f21e73@49.13.16.165:9010,enode://cf62d5ca87d8b23a76350ee4f42a1c2378a603a0340193451f7a6de61b4c3829b66ba64e72fc72f853925755e5a0ff4a48b29886289b60bd5ae91bf656084f78@49.13.16.165:30303?discport=30303
+              - --Pruning.Mode=None
+              - --config=none
+              - --log=INFO
+              - --Seq.MinLevel=Info
+              - --Seq.ServerUrl=https://seq.nethermind.io
+              - --Seq.ApiKey=yuOqjKOHhZCw2D2U7pmL
+              - --Metrics.PushGatewayUrl=http://94.237.52.161:9000/metrics/nethermind-iudiy4raagaizaih1phuaShekighoJ2ixaecahvii7ohte3oozeeh0eTh7Aich1Shee9ceetuy3iGhexoh5naithoot8rebi7fee
+            geth:
+              - --override.genesis=/data/network-config/genesis.json
+              - --http.api=eth,net,web3,debug,admin,txpool
+              - --http.vhosts=*
+              - --networkid=7073034301
+              - --syncmode=full
+              - --bootnodes=enode://94b94333f62c673cc7bcc3d6578d8a19ac32b2aad047254f4f4076d5d71591073d3091a4d1b0e308de340f77ff0bcf64294a6fef974aa1b21ebeea5ac6f21e73@49.13.16.165:9010,enode://cf62d5ca87d8b23a76350ee4f42a1c2378a603a0340193451f7a6de61b4c3829b66ba64e72fc72f853925755e5a0ff4a48b29886289b60bd5ae91bf656084f78@49.13.16.165:30303?discport=30303
+              - --rpc.allow-unprotected-txs
+            erigon:
+              - --chain=dev
+              - --http.api=eth,erigon,engine,web3,net,debug,trace,txpool,admin
+              - --http.vhosts=*
+              - --ws
+              - --prune=htc
+              - --networkid=7073034301
+              - --db.size.limit=500GB
+              - --bootnodes=enode://94b94333f62c673cc7bcc3d6578d8a19ac32b2aad047254f4f4076d5d71591073d3091a4d1b0e308de340f77ff0bcf64294a6fef974aa1b21ebeea5ac6f21e73@49.13.16.165:9010,enode://cf62d5ca87d8b23a76350ee4f42a1c2378a603a0340193451f7a6de61b4c3829b66ba64e72fc72f853925755e5a0ff4a48b29886289b60bd5ae91bf656084f78@49.13.16.165:30303?discport=30303
+            ethereumjs:
+          consensus:
+            lodestar:
+              - --paramsFile=/data/network-config/config.yaml
+              - --genesisStateFile=/data/network-config/genesis.ssz
+              - --bootnodes=enr:-LG4QOAJ1pT1XsLHcR9W4uvPui4nVnCSDOjPKekEOa6kOrBOM2eAtmVim41WE2OWHgEClTwxBIShIWEl6kXrTyAwolgDg2V0aMvKhGW7S4eEaXFGGoRldGgykJ9k3-f_______________-CaWSCdjSCaXCEMQ0QpYlzZWNwMjU2azGhA5S5QzP2LGc8x7zD1leNihmsMrKq0EclT09AdtXXFZEHg3RjcIIjMoN1ZHCCIzI,enr:-QEauEBDxMjRuP6xbow9wY7XadN_NWh-TeqkYpF2GEsbMSuDoF5yTQnNBsVQkrsKaT1c1G8eimm1qXrs6Bd1zwHfDfjEDIdhdHRuZXRziAAAAAAAAMAAg2NnY4GAhmNsaWVudNGKTGlnaHRob3VzZYU4LjAuMYRldGgykJ9k3-dwWSRVCgAAAAAAAACCaWSCdjSCaXCEMQ0QpYNpcDaQKgEE-MAT5rYAAAAAAAAAAYNuZmSEHrRfAoRxdWljgiMphXF1aWM2giMpiXNlY3AyNTZrMaED9buCvrx6FDpcrAgLBULhEsUWUQB15xzoR0qA6O9KPW6Ic3luY25ldHMAg3RjcIIjKIR0Y3A2giMog3VkcIIjKIR1ZHA2giMo
+              - --rest.namespace="*"
+              - --network.connectToDiscv5Bootnodes
+              - --nat=true
+            teku:
+              - --network=/data/network-config/config.yaml
+              - --genesis-state=/data/network-config/genesis.ssz
+              - --p2p-discovery-bootnodes=enr:-LG4QOAJ1pT1XsLHcR9W4uvPui4nVnCSDOjPKekEOa6kOrBOM2eAtmVim41WE2OWHgEClTwxBIShIWEl6kXrTyAwolgDg2V0aMvKhGW7S4eEaXFGGoRldGgykJ9k3-f_______________-CaWSCdjSCaXCEMQ0QpYlzZWNwMjU2azGhA5S5QzP2LGc8x7zD1leNihmsMrKq0EclT09AdtXXFZEHg3RjcIIjMoN1ZHCCIzI,enr:-QEauEBDxMjRuP6xbow9wY7XadN_NWh-TeqkYpF2GEsbMSuDoF5yTQnNBsVQkrsKaT1c1G8eimm1qXrs6Bd1zwHfDfjEDIdhdHRuZXRziAAAAAAAAMAAg2NnY4GAhmNsaWVudNGKTGlnaHRob3VzZYU4LjAuMYRldGgykJ9k3-dwWSRVCgAAAAAAAACCaWSCdjSCaXCEMQ0QpYNpcDaQKgEE-MAT5rYAAAAAAAAAAYNuZmSEHrRfAoRxdWljgiMphXF1aWM2giMpiXNlY3AyNTZrMaED9buCvrx6FDpcrAgLBULhEsUWUQB15xzoR0qA6O9KPW6Ic3luY25ldHMAg3RjcIIjKIR0Y3A2giMog3VkcIIjKIR1ZHA2giMo
+              - --p2p-peer-upper-bound=100
+              - --data-storage-non-canonical-blocks-enabled=true
+              - --data-storage-mode=PRUNE
+              - --logging=info
+              - --Xlog-include-p2p-warnings-enabled
+              - --metrics-block-timing-tracking-enabled
+              - --ignore-weak-subjectivity-period-enabled
+              - --rest-api-docs-enabled
+            prysm:
+              - --grpc-gateway-corsdomain=*
+              - --chain-config-file=/data/network-config/config.yaml
+              - --genesis-state=/data/network-config/genesis.ssz
+              - --contract-deployment-block=0
+              - --min-sync-peers=1
+              - --verbosity=debug
+              - --subscribe-all-subnets
+              - --bootstrap-node=enr:-LG4QOAJ1pT1XsLHcR9W4uvPui4nVnCSDOjPKekEOa6kOrBOM2eAtmVim41WE2OWHgEClTwxBIShIWEl6kXrTyAwolgDg2V0aMvKhGW7S4eEaXFGGoRldGgykJ9k3-f_______________-CaWSCdjSCaXCEMQ0QpYlzZWNwMjU2azGhA5S5QzP2LGc8x7zD1leNihmsMrKq0EclT09AdtXXFZEHg3RjcIIjMoN1ZHCCIzI
+              - --bootstrap-node=enr:-QEauEBDxMjRuP6xbow9wY7XadN_NWh-TeqkYpF2GEsbMSuDoF5yTQnNBsVQkrsKaT1c1G8eimm1qXrs6Bd1zwHfDfjEDIdhdHRuZXRziAAAAAAAAMAAg2NnY4GAhmNsaWVudNGKTGlnaHRob3VzZYU4LjAuMYRldGgykJ9k3-dwWSRVCgAAAAAAAACCaWSCdjSCaXCEMQ0QpYNpcDaQKgEE-MAT5rYAAAAAAAAAAYNuZmSEHrRfAoRxdWljgiMphXF1aWM2giMpiXNlY3AyNTZrMaED9buCvrx6FDpcrAgLBULhEsUWUQB15xzoR0qA6O9KPW6Ic3luY25ldHMAg3RjcIIjKIR0Y3A2giMog3VkcIIjKIR1ZHA2giMo
+            lighthouse:
+              - --testnet-dir=/data/network-config
+              - --boot-nodes=enr:-LG4QOAJ1pT1XsLHcR9W4uvPui4nVnCSDOjPKekEOa6kOrBOM2eAtmVim41WE2OWHgEClTwxBIShIWEl6kXrTyAwolgDg2V0aMvKhGW7S4eEaXFGGoRldGgykJ9k3-f_______________-CaWSCdjSCaXCEMQ0QpYlzZWNwMjU2azGhA5S5QzP2LGc8x7zD1leNihmsMrKq0EclT09AdtXXFZEHg3RjcIIjMoN1ZHCCIzI,enr:-QEauEBDxMjRuP6xbow9wY7XadN_NWh-TeqkYpF2GEsbMSuDoF5yTQnNBsVQkrsKaT1c1G8eimm1qXrs6Bd1zwHfDfjEDIdhdHRuZXRziAAAAAAAAMAAg2NnY4GAhmNsaWVudNGKTGlnaHRob3VzZYU4LjAuMYRldGgykJ9k3-dwWSRVCgAAAAAAAACCaWSCdjSCaXCEMQ0QpYNpcDaQKgEE-MAT5rYAAAAAAAAAAYNuZmSEHrRfAoRxdWljgiMphXF1aWM2giMpiXNlY3AyNTZrMaED9buCvrx6FDpcrAgLBULhEsUWUQB15xzoR0qA6O9KPW6Ic3luY25ldHMAg3RjcIIjKIR0Y3A2giMog3VkcIIjKIR1ZHA2giMo
+            nimbus:
+              - --network=/data/network-config
+              - --validator-monitor-auto=false
+              - --doppelganger-detection=off
+              - --log-level=INFO
+              - --light-client-data-serve=false
+              - --bootstrap-node=enr:-LG4QOAJ1pT1XsLHcR9W4uvPui4nVnCSDOjPKekEOa6kOrBOM2eAtmVim41WE2OWHgEClTwxBIShIWEl6kXrTyAwolgDg2V0aMvKhGW7S4eEaXFGGoRldGgykJ9k3-f_______________-CaWSCdjSCaXCEMQ0QpYlzZWNwMjU2azGhA5S5QzP2LGc8x7zD1leNihmsMrKq0EclT09AdtXXFZEHg3RjcIIjMoN1ZHCCIzI
+              - --bootstrap-node=enr:-QEauEBDxMjRuP6xbow9wY7XadN_NWh-TeqkYpF2GEsbMSuDoF5yTQnNBsVQkrsKaT1c1G8eimm1qXrs6Bd1zwHfDfjEDIdhdHRuZXRziAAAAAAAAMAAg2NnY4GAhmNsaWVudNGKTGlnaHRob3VzZYU4LjAuMYRldGgykJ9k3-dwWSRVCgAAAAAAAACCaWSCdjSCaXCEMQ0QpYNpcDaQKgEE-MAT5rYAAAAAAAAAAYNuZmSEHrRfAoRxdWljgiMphXF1aWM2giMpiXNlY3AyNTZrMaED9buCvrx6FDpcrAgLBULhEsUWUQB15xzoR0qA6O9KPW6Ic3luY25ldHMAg3RjcIIjKIR0Y3A2giMog3VkcIIjKIR1ZHA2giMo
+
+
+  geth:
+    enabled: true
+    fullnameOverride: geth-prysm-001
+    image:
+      repository: ethpandaops/geth
+      tag: master
+      pullPolicy: Always
+    p2pNodePort:
+      enabled: true
+      port: 31480
+    persistence:
+      enabled: true
+      size: 100Gi
+    podLabels:
+      network: blob-devnet-0
+      testnet: blob-devnet-0
+      ethereum_network: blob-devnet-0
+      ethereum_role: execution
+      consensus_client: prysm
+      execution_client: geth
+      ethereum_instance: geth-prysm-001
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 5Gi
+      limits:
+        cpu: 3000m
+        memory: 7Gi
+    initContainers:
+      - name: init-config
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        command:
+          - sh
+          - -ace
+          - >
+            CHAINSPEC_URI=https://config.blob-devnet-0.ethpandaops.io/el/chainspec.json;
+            GENESIS_URI=https://config.blob-devnet-0.ethpandaops.io/el/genesis.json;
+            BESU_GENESIS_URI=https://config.blob-devnet-0.ethpandaops.io/el/besu.json;
+            ENODES_URI=https://config.blob-devnet-0.ethpandaops.io/el/enodes.txt;
+            mkdir -p /data/network-config;
+            if ! [ -f /data/network_config_init_done ];
+            then
+              apk update && apk add curl jq;
+              wget -O /data/network-config/chainspec.json $CHAINSPEC_URI;
+              wget -O /data/network-config/genesis.json $GENESIS_URI;
+              wget -O /data/network-config/besu.json $BESU_GENESIS_URI;
+              wget -O /data/network-config/enodes.txt $ENODES_URI;
+              cat /data/network-config/genesis.json | jq -r '.config.chainId' > /data/network-config/chainid.txt;
+              touch /data/network_config_init_done;
+              echo "network config init done";
+            else
+              echo "network config already present";
+            fi;
+            echo "bootnode init done: $(cat /data/network-config/enodes.txt)";
+        volumeMounts:
+          - name: storage
+            mountPath: "/data"
+      - name: init-genesis
+        image: ethpandaops/geth:master
+        imagePullPolicy: Always
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        command:
+          - sh
+          - -ace
+          - >
+            if ! [ -f /data/genesis_init_done ];
+            then
+              geth init --datadir /data /data/network-config/genesis.json;
+              touch /data/genesis_init_done;
+              echo "genesis init done";
+            else
+              echo "genesis is already initialized";
+            fi;
+        volumeMounts:
+          - name: storage
+            mountPath: "/data"
+
+  prysm:
+    checkpointSync:
+      enabled: false
+      addresses:
+        blob-devnet-0: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-bootnode-1.blob-devnet-0.ethpandaops.io
+    enabled: true
+    fullnameOverride: prysm-geth-001
+    image:
+      repository: ethpandaops/prysm-beacon-chain
+      tag: develop
+      pullPolicy: Always
+    mode: "beacon"
+    p2pNodePort:
+      enabled: true
+      port: 32480
+    podLabels:
+      network: blob-devnet-0
+      testnet: blob-devnet-0
+      ethereum_network: blob-devnet-0
+      ethereum_role: consensus
+      consensus_client: prysm
+      execution_client: geth
+      ethereum_instance: prysm-geth-001
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 5Gi
+      limits:
+        cpu: 3000m
+        memory: 7Gi
+    persistence:
+      enabled: true
+      size: 200Gi
+    initContainers:
+    - name: init-genesis
+      image: alpine:latest
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+      command:
+        - sh
+        - -ace
+        - >
+          apk add jq curl sed;
+          DEPOSIT_CONTRACT_URI=https://config.blob-devnet-0.ethpandaops.io/cl/deposit_contract.txt;
+          DEPOSIT_CONTRACT_BLOCK_URI=https://config.blob-devnet-0.ethpandaops.io/cl/deposit_contract_block.txt;
+          DEPOSIT_CONTRACT_BLOCK_HASH_URI=https://config.blob-devnet-0.ethpandaops.io/cl/deposit_contract_block_hash.txt;
+          GENESIS_CONFIG_URI=https://config.blob-devnet-0.ethpandaops.io/cl/config.yaml;
+          GENESIS_SSZ_URI=https://config.blob-devnet-0.ethpandaops.io/cl/genesis.ssz;
+          mkdir -p /data/network-config;
+          curl -s https://config.blob-devnet-0.ethpandaops.io/api/v1/nodes/inventory | jq -r '.ethereum_pairs[] | .consensus.enr' > /data/network-config/bootstrap_nodes.txt;
+          if ! [ -f /data/network-config/genesis.ssz ];
+          then
+            wget -O /data/network-config/deposit_contract.txt $DEPOSIT_CONTRACT_URI;
+            wget -O /data/network-config/deposit_contract_block.txt $DEPOSIT_CONTRACT_BLOCK_URI;
+            wget -O /data/network-config/deposit_contract_block_hash.txt $DEPOSIT_CONTRACT_BLOCK_HASH_URI;
+            wget -O /data/network-config/config.yaml $GENESIS_CONFIG_URI;
+            wget -O /data/network-config/genesis.ssz $GENESIS_SSZ_URI;
+            echo "genesis init done";
+          else
+            echo "genesis exists. skipping...";
+          fi;
+          (tr '\n' ',' < /data/network-config/bootstrap_nodes.txt | sed 's/[^,]*/"&"/g') > /data/network-config/bootstrap_nodes2.txt;
+          mv /data/network-config/bootstrap_nodes2.txt /data/network-config/bootstrap_nodes.txt;
+          echo "bootnode init done: $(cat /data/network-config/bootstrap_nodes.txt)";
+      volumeMounts:
+        - name: storage
+          mountPath: "/data"

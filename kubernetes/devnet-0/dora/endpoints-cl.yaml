@@ -1,0 +1,49 @@
+# Ansible managed. Don't change this file manually. Template info: /vendor/collections/ansible_collections/ethpandaops/general/roles/generate_kubernetes_config/templates/dora-endpoints-cl.yaml.j2
+# Consensus layer endpoints
+
+- url: http://prysm-geth-001:5052
+  name: rpc-prysm-geth-001
+  authGroup: pandaops
+  archive: true
+  priority: 1
+- url: https://bn-bootnode-1.srv.blob-devnet-0.ethpandaops.io
+  name: bootnode-1
+  authGroup: pandaops
+  priority: -1
+- url: https://bn-lighthouse-besu-super-1.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-besu-super-1
+  authGroup: pandaops
+  priority: -1
+  archive: true
+- url: https://bn-lighthouse-erigon-full-1.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-erigon-full-1
+  authGroup: pandaops
+  priority: -1
+  archive: true
+- url: https://bn-lighthouse-geth-super-1.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-geth-super-1
+  authGroup: pandaops
+  priority: -1
+  archive: true
+- url: https://bn-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-nimbusel-full-1
+  authGroup: pandaops
+  priority: -1
+  archive: true
+- url: https://bn-prysm-besu-full-1.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-besu-full-1
+  authGroup: pandaops
+  priority: -1
+- url: https://bn-prysm-geth-full-1.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-geth-full-1
+  authGroup: pandaops
+  priority: -1
+- url: https://bn-prysm-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-nethermind-super-1
+  authGroup: pandaops
+  priority: -1
+- url: https://bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-reth-super-1
+  authGroup: pandaops
+  priority: -1
+

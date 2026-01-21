@@ -2,12 +2,12 @@
 //                            TERRAFORM PROVIDERS & BACKEND
 ////////////////////////////////////////////////////////////////////////////////////////
 provider "hcloud" {
-  token = var.devnet_hcloud_token
+  token = var.blob_hcloud_token
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //                                        VARIABLES
 ////////////////////////////////////////////////////////////////////////////////////////
-variable "devnet_hcloud_token" {
+variable "blob_hcloud_token" {
   type        = string
   description = "Hetzner Cloud API Token"
   sensitive   = true
@@ -29,9 +29,9 @@ variable "hetzner_fullnode_size" {
 
 variable "hetzner_regions" {
   default = [
-    "nbg1",
-    "fsn1",
-    "hel1"
+    #"hel1",
+    "fsn1"
+#    "nbg1"
   ]
 }
 
@@ -59,7 +59,7 @@ locals {
     [
       for i in range(0, vm_group.count) : {
         group_name = "${vm_group.name}"
-        id         = "hc-${vm_group.name}-${i + 1}"
+        id         = "${vm_group.name}-${i + 1}"
         vms = {
           "${i + 1}" = {
             labels = join(",", compact([
@@ -118,6 +118,16 @@ locals {
 ////////////////////////////////////////////////////////////////////////////////////////
 //                                  HETZNER RESOURCES
 ////////////////////////////////////////////////////////////////////////////////////////
+
+# Randomize region selection for each VM
+resource "random_shuffle" "vm_region" {
+  for_each = {
+    for vm in local.hcloud_vms : "${vm.id}" => vm
+  }
+  input        = var.hetzner_regions
+  result_count = 1
+}
+
 resource "hcloud_network" "main" {
   for_each = local.hetzner_network
   name     = try(each.value.name, "${var.ethereum_network}-${each.key}")
@@ -143,7 +153,7 @@ resource "hcloud_server" "main" {
   name        = "${var.ethereum_network}-${each.value.name}"
   image       = each.value.image
   server_type = each.value.server_type
-  location    = each.value.location
+  location    = random_shuffle.vm_region[each.key].result[0]
   ssh_keys    = each.value.ssh_keys
   backups     = each.value.backups
   labels      = { for label in each.value.labels : split(":", label)[0] => split(":", label)[1] }
@@ -159,8 +169,7 @@ resource "hcloud_server_network" "main" {
     for vm in local.hcloud_vms : "${vm.id}" => vm
   }
   server_id  = hcloud_server.main[each.key].id
-  network_id = hcloud_network.main[each.value.location].id
-
+  network_id = hcloud_network.main[random_shuffle.vm_region[each.key].result[0]].id
 }
 
 
