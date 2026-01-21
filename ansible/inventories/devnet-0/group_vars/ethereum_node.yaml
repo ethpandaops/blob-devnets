@@ -29,8 +29,6 @@ brakebear_config: |
         docker-networks:
           names: ["*"]
 
-
-
 # role: ethpandaops.general.prometheus
 prometheus_remote_push_url: https://victoriametrics-public.analytics.production.platform.ethpandaops.io/insert/1/prometheus
 prometheus_remote_write_username: "{{ secret_prometheus_remote_write.username }}"

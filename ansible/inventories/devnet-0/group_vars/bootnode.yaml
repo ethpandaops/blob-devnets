@@ -59,19 +59,8 @@ lighthouse_container_volumes:
   - "{{ eth_testnet_config_dir }}:/network-config:ro"
 lighthouse_container_command_extra_args:
   - --testnet-dir=/network-config
-  - --boot-nodes={{ ethereum_cl_bootnodes | join(',') }}
   - --allow-insecure-genesis-sync
-teku_container_command_extra_args:
-  - --network=/network-config/config.yaml
-  - --genesis-state=/network-config/genesis.ssz
-  - --p2p-peer-upper-bound=100
-  - --data-storage-non-canonical-blocks-enabled=true
-  - --data-storage-mode=ARCHIVE
-  - --logging=info
-  - --Xlog-include-p2p-warnings-enabled
-  - --metrics-block-timing-tracking-enabled
-  - >-
-    --p2p-discovery-bootnodes={{
+  - --boot-nodes={{
       (
         (
           groups['bootnode']
