@@ -31,12 +31,15 @@ xatu_sentry_config:
     - voluntary_exit
     - contribution_and_proof
     - blob_sidecar
+    - data_column_sidecar
   attestationData:
     enabled: false
   beaconCommittees:
-    enabled: false
+    enabled: true
   forkChoice:
     enabled: false
+  proposerDuty:
+    enabled: true
   outputs:
   - config:
       address: "{{ xatu_sentry_config_server_address }}"
@@ -56,6 +59,7 @@ xatu_sentry_config:
       - BEACON_API_ETH_V1_EVENTS_BLOCK_GOSSIP
       - BEACON_API_ETH_V1_EVENTS_CHAIN_REORG
       - BEACON_API_ETH_V1_EVENTS_CHAIN_REORG_V2
+      - BEACON_API_ETH_V1_EVENTS_DATA_COLUMN_SIDECAR
       - BEACON_API_ETH_V1_EVENTS_FINALIZED_CHECKPOINT
       - BEACON_API_ETH_V1_EVENTS_FINALIZED_CHECKPOINT_V2
       - BEACON_API_ETH_V1_EVENTS_HEAD
