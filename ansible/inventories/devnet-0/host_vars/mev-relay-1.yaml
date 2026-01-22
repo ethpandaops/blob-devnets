@@ -35,10 +35,10 @@ mev_relay_housekeeper_container_env:
 
 mev_relay_housekeeper_container_pull: true
 mev_relay_housekeeper_container_command_extra_args:
-    - --network=custom
-    - --beacon-uris={{ beacon_endpoint }}
-    - --redis-uri=mev-relay-redis:6379
-    - --db=postgres://postgres:postgres@mev-relay-database:5432/boostrelay?sslmode=disable
+  - --network=custom
+  - --beacon-uris={{ beacon_endpoint }}
+  - --redis-uri=mev-relay-redis:6379
+  - --db=postgres://postgres:postgres@mev-relay-database:5432/boostrelay?sslmode=disable
 
 # ------------------------------------------------------------------
 # mev-relay-api
@@ -102,8 +102,6 @@ mev_relay_website_container_command_extra_args:
   - --listen-addr=0.0.0.0:9060
   - https://0xa55c1285d84ba83a5ad26420cd5ad3091e49c55a813eee651cd467db38a8c8e63192f47955e9376f6b42f6d190571cb5@mev-relay-api.{{ network_server_subdomain }}:9062
 
-
-
 # role: ethpandaops.general.ethereum_node
 ethereum_node_cl: lighthouse
 ethereum_node_mev_boost_enabled: false
@@ -127,7 +125,7 @@ lighthouse_container_command_extra_args:
   - --always-prepare-payload
   - --prepare-payload-lookahead=8000
   - --suggested-fee-recipient={{ ethereum_node_cl_validator_fee_recipient }}
-  #- --allow-insecure-genesis-sync
+  # - --allow-insecure-genesis-sync
 lighthouse_validator_container_volumes:
   - "{{ lighthouse_validator_datadir }}:/validator-data"
   - "{{ eth_testnet_config_dir }}:/network-config:ro"
@@ -230,4 +228,3 @@ ethereum_node_docker_watchtower_containers_list:
   - mev-relay-housekeeper
   - mev-relay-api
   - mev-relay-website
-

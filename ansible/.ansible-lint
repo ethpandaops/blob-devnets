@@ -1,0 +1,9 @@
+---
+exclude_paths:
+  - vendor/
+
+skip_list:
+  - name[play]  # import_playbook cannot have a name attribute
+
+warn_list:
+  - yaml[line-length]  # Many config values exceed 160 chars and cannot be easily split
