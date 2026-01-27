@@ -1,5 +1,5 @@
 #!/bin/zsh
-node="bootnode-1"
+node="lighthouse-geth-super-1"
 network="devnet-0"
 domain="ethpandaops.io"
 srv="srv"
