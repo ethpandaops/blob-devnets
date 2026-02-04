@@ -1,10 +1,10 @@
 default_ethereum_client_images:
   ### Consensus layer clients
-  lighthouse: ethpandaops/lighthouse:unstable
+  lighthouse: ethpandaops/lighthouse:dknopik-partial-columns
   lodestar: chainsafe/lodestar:latest
   nimbus: statusim/nimbus-eth2:multiarch-latest
-  prysm: ethpandaops/prysm-beacon-chain:develop
-  prysm_validator: gcr.io/offchainlabs/prysm/validator:latest
+  prysm: ethpandaops/prysm-beacon-chain:fix-partial-columns-do-not-batch-publish
+  prysm_validator: ethpandaops/prysm-validator:fix-partial-columns-do-not-batch-publish
   teku: consensys/teku:latest
   grandine: ethpandaops/grandine:develop
   ### Execution layer clients

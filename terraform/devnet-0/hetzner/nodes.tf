@@ -24,7 +24,7 @@ variable "mev_relay" {
 variable "lighthouse_geth_super" {
   default = {
     name            = "lighthouse-geth-super"
-    count           = 1
+    count           = 2
     validator_start = 0
     validator_end   = 8
   }
@@ -33,7 +33,7 @@ variable "lighthouse_geth_super" {
 variable "lighthouse_besu_super" {
   default = {
     name            = "lighthouse-besu-super"
-    count           = 1
+    count           = 2
     validator_start = 8
     validator_end   = 16
   }
@@ -97,7 +97,7 @@ variable "prysm_besu_super" {
 variable "prysm_nethermind_super" {
   default = {
     name            = "prysm-nethermind-super"
-    count           = 1
+    count           = 2
     validator_start = 16
     validator_end   = 24
   }
@@ -115,7 +115,7 @@ variable "prysm_erigon_super" {
 variable "prysm_reth_super" {
   default = {
     name            = "prysm-reth-super"
-    count           = 1
+    count           = 2
     validator_start = 24
     validator_end   = 32
   }
@@ -244,9 +244,9 @@ variable "nimbus_nimbusel_super" {
 variable "teku_geth_super" {
   default = {
     name            = "teku-geth-super"
-    count           = 1
+    count           = 2
     validator_start = 64
-    validator_end   = 400
+    validator_end   = 72
   }
 }
 
@@ -383,7 +383,7 @@ variable "lighthouse_nethermind_full" {
 variable "lighthouse_erigon_full" {
   default = {
     name            = "lighthouse-erigon-full"
-    count           = 1
+    count           = 2
     validator_start = 32
     validator_end   = 40
   }
@@ -401,7 +401,7 @@ variable "lighthouse_reth_full" {
 variable "lighthouse_nimbusel_full" {
   default = {
     name            = "lighthouse-nimbusel-full"
-    count           = 1
+    count           = 2
     validator_start = 40
     validator_end   = 48
   }
@@ -411,7 +411,7 @@ variable "lighthouse_nimbusel_full" {
 variable "prysm_geth_full" {
   default = {
     name            = "prysm-geth-full"
-    count           = 1
+    count           = 2
     validator_start = 48
     validator_end   = 56
   }
@@ -420,7 +420,7 @@ variable "prysm_geth_full" {
 variable "prysm_besu_full" {
   default = {
     name            = "prysm-besu-full"
-    count           = 1
+    count           = 2
     validator_start = 56
     validator_end   = 64
   }

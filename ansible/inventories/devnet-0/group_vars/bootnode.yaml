@@ -59,7 +59,6 @@ lighthouse_container_volumes:
   - "{{ eth_testnet_config_dir }}:/network-config:ro"
 lighthouse_container_command_extra_args:
   - --testnet-dir=/network-config
-  - --allow-insecure-genesis-sync
   - >-
     --boot-nodes={{
       (
