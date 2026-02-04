@@ -41,21 +41,39 @@ dugtrio:
     name: bootnode-1
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-besu-super-1.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-besu-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-besu-super-2.srv.blob-devnet-0.ethpandaops.io
+    name: lighthouse-besu-super-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-erigon-full-1.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-erigon-full-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-erigon-full-2.srv.blob-devnet-0.ethpandaops.io
+    name: lighthouse-erigon-full-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-geth-super-1.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-geth-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-geth-super-2.srv.blob-devnet-0.ethpandaops.io
+    name: lighthouse-geth-super-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-nimbusel-full-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nimbusel-full-2.srv.blob-devnet-0.ethpandaops.io
+    name: lighthouse-nimbusel-full-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
     name: mev-relay-1
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-besu-full-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-besu-full-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-besu-full-2.srv.blob-devnet-0.ethpandaops.io
+    name: prysm-besu-full-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-geth-full-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-geth-full-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-geth-full-2.srv.blob-devnet-0.ethpandaops.io
+    name: prysm-geth-full-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-nethermind-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-nethermind-super-2.srv.blob-devnet-0.ethpandaops.io
+    name: prysm-nethermind-super-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
     name: prysm-reth-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-2.srv.blob-devnet-0.ethpandaops.io
+    name: prysm-reth-super-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
     name: teku-geth-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io
+    name: teku-geth-super-2

@@ -15,8 +15,18 @@
   authGroup: pandaops
   priority: -1
   archive: true
+- url: https://bn-lighthouse-besu-super-2.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-besu-super-2
+  authGroup: pandaops
+  priority: -1
+  archive: true
 - url: https://bn-lighthouse-erigon-full-1.srv.blob-devnet-0.ethpandaops.io
   name: lighthouse-erigon-full-1
+  authGroup: pandaops
+  priority: -1
+  archive: true
+- url: https://bn-lighthouse-erigon-full-2.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-erigon-full-2
   authGroup: pandaops
   priority: -1
   archive: true
@@ -25,8 +35,18 @@
   authGroup: pandaops
   priority: -1
   archive: true
+- url: https://bn-lighthouse-geth-super-2.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-geth-super-2
+  authGroup: pandaops
+  priority: -1
+  archive: true
 - url: https://bn-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
   name: lighthouse-nimbusel-full-1
+  authGroup: pandaops
+  priority: -1
+  archive: true
+- url: https://bn-lighthouse-nimbusel-full-2.srv.blob-devnet-0.ethpandaops.io
+  name: lighthouse-nimbusel-full-2
   authGroup: pandaops
   priority: -1
   archive: true
@@ -38,20 +58,40 @@
   name: prysm-besu-full-1
   authGroup: pandaops
   priority: -1
+- url: https://bn-prysm-besu-full-2.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-besu-full-2
+  authGroup: pandaops
+  priority: -1
 - url: https://bn-prysm-geth-full-1.srv.blob-devnet-0.ethpandaops.io
   name: prysm-geth-full-1
+  authGroup: pandaops
+  priority: -1
+- url: https://bn-prysm-geth-full-2.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-geth-full-2
   authGroup: pandaops
   priority: -1
 - url: https://bn-prysm-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
   name: prysm-nethermind-super-1
   authGroup: pandaops
   priority: -1
+- url: https://bn-prysm-nethermind-super-2.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-nethermind-super-2
+  authGroup: pandaops
+  priority: -1
 - url: https://bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
   name: prysm-reth-super-1
   authGroup: pandaops
   priority: -1
+- url: https://bn-prysm-reth-super-2.srv.blob-devnet-0.ethpandaops.io
+  name: prysm-reth-super-2
+  authGroup: pandaops
+  priority: -1
 - url: https://bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
   name: teku-geth-super-1
+  authGroup: pandaops
+  priority: -1
+- url: https://bn-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io
+  name: teku-geth-super-2
   authGroup: pandaops
   priority: -1
 

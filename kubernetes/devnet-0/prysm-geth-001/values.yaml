@@ -8,7 +8,7 @@ prysm-geth-001:
       rpcEndpoint: http://geth-prysm-001:8545
       beaconEndpoint: http://prysm-geth-001:5052
     checkpointSync:
-      enabled: false
+      enabled: true
       addresses:
         blob-devnet-0: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-bootnode-1.blob-devnet-0.ethpandaops.io
     clientArgs:
@@ -42,7 +42,6 @@ prysm-geth-001:
               - --bootnodes=enode://94b94333f62c673cc7bcc3d6578d8a19ac32b2aad047254f4f4076d5d71591073d3091a4d1b0e308de340f77ff0bcf64294a6fef974aa1b21ebeea5ac6f21e73@49.13.16.165:9010,enode://cf62d5ca87d8b23a76350ee4f42a1c2378a603a0340193451f7a6de61b4c3829b66ba64e72fc72f853925755e5a0ff4a48b29886289b60bd5ae91bf656084f78@49.13.16.165:30303?discport=30303
               - --rpc.allow-unprotected-txs
             erigon:
-              - --chain=dev
               - --http.api=eth,erigon,engine,web3,net,debug,trace,txpool,admin
               - --http.vhosts=*
               - --ws
@@ -178,14 +177,14 @@ prysm-geth-001:
 
   prysm:
     checkpointSync:
-      enabled: false
+      enabled: true
       addresses:
         blob-devnet-0: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-bootnode-1.blob-devnet-0.ethpandaops.io
     enabled: true
     fullnameOverride: prysm-geth-001
     image:
       repository: ethpandaops/prysm-beacon-chain
-      tag: develop
+      tag: fix-partial-columns-do-not-batch-publish
       pullPolicy: Always
     mode: "beacon"
     p2pNodePort:
