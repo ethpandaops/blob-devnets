@@ -17,6 +17,7 @@ brakebear_config: |
     - name: "execution"
       download_rate: {{ brakebear_download_speed }}
       upload_rate: {{ brakebear_upload_speed }}
+      latency: 80ms
       exclusions:
         private-networks: true
         docker-networks:
@@ -24,6 +25,7 @@ brakebear_config: |
     - name: "beacon"
       download_rate: {{ brakebear_download_speed }}
       upload_rate: {{ brakebear_upload_speed }}
+      latency: 80ms
       exclusions:
         private-networks: true
         docker-networks:
