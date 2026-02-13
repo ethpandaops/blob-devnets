@@ -35,6 +35,8 @@ spamoor:
     enabled: true
 
   privateKey: "<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.spamoor_private_key}>"
+  enableAuth: true
+  authTokenKey: "<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.spamoor_private_key}>-spamoor-jwt"
   rpcEndpoints:
   # Rpc
   - "http://geth-prysm-001:8545"
