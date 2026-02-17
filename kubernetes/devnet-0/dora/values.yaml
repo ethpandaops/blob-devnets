@@ -43,6 +43,9 @@ dora:
   proxyCount: 2
   executionIndexerEnabled: True
   executionIndexerRetention: 336h
+  executionIndexerDetailsEnabled: true
+  executionIndexerTracesEnabled: True
+  executionIndexerDetailsMaxSize: "100GB"
   tracoorUrl: "https://tracoor.blob-devnet-0.ethpandaops.io"
   tracoorNetwork: "blob-devnet-0"
 
@@ -72,6 +75,15 @@ dora:
       credentials:
         username: ""
         password: "<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>"
+
+  blockDbEngine: "s3"
+  blockDbConfig:
+    endpoint: "<path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_url}>"
+    secure: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_secure}>
+    accessKey: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_access_key}>
+    secretKey: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_secret_key}>
+    bucket: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_bucket}>
+    path: "blob-devnet-0"
 
   endpointsUrl: "https://raw.githubusercontent.com/ethpandaops/blob-devnets/refs/heads/master/kubernetes/devnet-0/dora/endpoints-cl.yaml"
   executionEndpointsUrl: "https://raw.githubusercontent.com/ethpandaops/blob-devnets/refs/heads/master/kubernetes/devnet-0/dora/endpoints-el.yaml"
