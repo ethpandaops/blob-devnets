@@ -79,6 +79,7 @@ dora:
   blockDbEngine: "s3"
   blockDbConfig:
     endpoint: "<path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_url}>"
+
     secure: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_secure}>
     accessKey: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_access_key}>
     secretKey: <path:/secrets/services/services.enc.yaml#dora | jsonPath {.s3_secret_key}>
