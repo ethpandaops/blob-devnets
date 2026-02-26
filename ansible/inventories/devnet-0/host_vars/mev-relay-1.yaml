@@ -127,7 +127,7 @@ lighthouse_container_command_extra_args:
   - --always-prepare-payload
   - --prepare-payload-lookahead=8000
   - --suggested-fee-recipient={{ ethereum_node_cl_validator_fee_recipient }}
-  - --target-peers=2
+  - --target-peers=5
   - --purge-db-force
   - --enable-partial-columns
   # - --allow-insecure-genesis-sync

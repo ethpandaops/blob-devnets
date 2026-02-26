@@ -3,8 +3,8 @@ default_ethereum_client_images:
   lighthouse: ethpandaops/lighthouse:dknopik-partial-columns
   lodestar: chainsafe/lodestar:latest
   nimbus: statusim/nimbus-eth2:multiarch-latest
-  prysm: ethpandaops/prysm-beacon-chain:metrics-for-partial-cells
-  prysm_validator: ethpandaops/prysm-validator:metrics-for-partial-cells
+  prysm: ethpandaops/prysm-beacon-chain:prysm-partial-cells-current
+  prysm_validator: ethpandaops/prysm-validator:prysm-partial-cells-current
   teku: consensys/teku:latest
   grandine: ethpandaops/grandine:develop
   ### Execution layer clients
