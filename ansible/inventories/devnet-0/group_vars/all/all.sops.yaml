@@ -36,14 +36,15 @@ nethermind_seq_server: ENC[AES256_GCM,data:wEIM2pUqK+I3rf42maFTr05r8cOJWjnpPQ==,
 nethermind_push_gateway: ENC[AES256_GCM,data:ScReyCHKHx2/8Yo3epSAsb3MykmlIrGkUegaV5+21aboPCgU+VbUOBfvqaTWpcQN3OjXH+euQj1bHL1etGk1qvjzm2sp/P9oqbHRU827nbejkk5SKEeC4q79U7QyQTbUJ1Z9paX1sYZysMDUf2LUb9r/wHhB7bknQYKnHBAg0Li7qw5T5o1yatJoDqfahe4R1Q==,iv:WuQDvBvS2zjEB805HYkq5TQ/H8baF23vyMP9JbdqCao=,tag:jTOnfh2+ZmWIXQBzIpIVCQ==,type:str]
 tysm_secret_key: ENC[AES256_GCM,data:MuvclVLaNVZ+7vRumg==,iv:XGBLMISj2wL7MQznXnVggjudiaw6Ff4i3wGt37/EKqA=,tag:ib5t0B5qa1FD6Ff8xYIFwQ==,type:str]
 tempo_grpc_url: ENC[AES256_GCM,data:ltAVTGgrqhUBXdAZe7D1HvdXK72YIORL/x4DYHgX911s+X8IZM9/guRqE1I/ZYSzNrQX0qON3/TrNSjpG1BUpkK9M0SLzqE4EKhaOOQonJRLunnufZVrZIDhXSMaGQhZcjsHQCV8,iv:4mzqA4Ck1g91+tST5oTSnTepikjOCWKJrV04Rsp/8Ts=,tag:MgjQUb+lR1SIU2d8KpvOew==,type:str]
+tempo_grpcs_url: ENC[AES256_GCM,data:jEozAoMPs0sU9HczD2E784PQ4Ycg8YQd6NN6LXtu+TEDFVAXwrxv+HgeEhLYDt5g1+ZjX4yA8WAMpgoSjQLHnm5hkpMCzz+GYK+hvHOZEH5Mr0tP9mkGBKTgRTuq/BG+HNDwuPiH,iv:/hirSsl1ahFSDmx/jTk96F3WMDXMs9XXbDjzB0cpTS8=,tag:ZLYOTkk3D7HWinBFP/WwJw==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2026-01-21T19:50:28Z"
-    mac: ENC[AES256_GCM,data:U9rhMmE7jf3sViTneabjg/p1PvogmZvj66pLt4E5uplIB/AkCeATGbNpEE3rjoF/2/WZaQb6VTUIGM+dPwHxkdWbEYwxJt6KiXVbZz2DftJY0i8XbQp/lE2HIaQLBSWmOBDfwMahg2sFeI7tNfyu/u1QEalrTm0MoPyKNlfQvbk=,iv:xczC10HZuhHBN3NnjNQPFWWSJdGf59sdJEYJUMW52Us=,tag:EA6i5a094Wes00Gml2szKQ==,type:str]
+    lastmodified: "2026-03-03T10:51:08Z"
+    mac: ENC[AES256_GCM,data:MgLV1bypfG1yTwvmDhIiLDSOnJusuysWdTM4zM++fExWx1ns32Cin41iobkwopbGzRsDKx/0k1giO36lNser1haYMoDCBFViwX6yIxufVDcL6/630SOGGnRW0bV2fGa0RB+VbM6XO/gyieqSOIl1PpmL6E8JMvdlgzTX5+wW/84=,iv:s8l925xT0dScmcGIC/cADfZuVAhBKoS+FhKuKFCRZ6M=,tag:5qnAlsRv1Nn/u/3Hk4i4Fg==,type:str]
     pgp:
         - created_at: "2025-10-27T13:25:35Z"
           enc: |-

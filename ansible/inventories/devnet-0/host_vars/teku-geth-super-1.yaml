@@ -1,1 +1,34 @@
 ethereum_node_json_rpc_snooper_engine_enabled: false
+
+geth_container_image: bbusa/geth:grpc-otel
+
+geth_container_command_extra_args:
+  - --override.genesis=/network-config/genesis.json
+  - --http.api=eth,net,web3,debug,admin,txpool
+  - --http.vhosts=*
+  - --networkid={{ ethereum_network_id }}
+  - --syncmode=full
+  - --bootnodes={{ ethereum_el_bootnodes | join(',') }}
+  - --rpc.telemetry
+  - --rpc.telemetry.endpoint={{ tempo_grpcs_url }}
+  - --rpc.telemetry.instance-id={{ inventory_hostname }}
+
+
+teku_container_image: bbusa/teku:otel
+
+teku_container_command_extra_args:
+  - --network=/network-config/config.yaml
+  - --genesis-state=/network-config/genesis.ssz
+  - --p2p-discovery-bootnodes={{ ethereum_cl_bootnodes | join(',') }}
+  - --p2p-peer-upper-bound=100
+  - --data-storage-non-canonical-blocks-enabled=true
+  - --data-storage-mode=PRUNE
+  - --validators-graffiti={{ ansible_hostname }}
+  - --logging=info
+  - --Xlog-include-p2p-warnings-enabled
+  - --metrics-block-timing-tracking-enabled
+  - --ignore-weak-subjectivity-period-enabled
+  - --rest-api-docs-enabled
+  - --otel-tracing-enabled
+  - --otel-tracing-endpoint={{ tempo_grpcs_url }}
+  - --otel-service-instance-id={{ inventory_hostname }}
