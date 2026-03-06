@@ -22,6 +22,7 @@ variable "digitalocean_fullnode_size" {
 }
 
 variable "digitalocean_regions" {
+  type = any
   default = [
     "nyc1",
     "sgp1",
@@ -55,10 +56,10 @@ locals {
     for vm_group in local.vm_groups :
     vm_group.count > 0 ? [
       for i in range(0, vm_group.count) : {
-        group_name = "${vm_group.name}"
+        group_name = vm_group.name
         id         = "${vm_group.name}-${i + 1}"
         vms = {
-          "${i + 1}" = {
+          tostring(i + 1) = {
             tags = join(",", compact([
               "group_name:${vm_group.name}",
               "val_start:${vm_group.validator_start + (i * (vm_group.validator_end - vm_group.validator_start) / vm_group.count)}",
@@ -90,11 +91,11 @@ locals {
   digitalocean_vms = flatten([
     for group in local.digitalocean_vm_groups : [
       for vm_key, vm in group.vms : {
-        id        = "${group.id}"
-        group_key = "${group.group_name}"
+        id        = group.id
+        group_key = group.group_name
         vm_key    = vm_key
 
-        name         = try(vm.name, "${group.id}")
+        name         = try(vm.name, group.id)
         ssh_keys     = try(vm.ssh_keys, [data.digitalocean_ssh_key.main.fingerprint])
         region       = try(vm.region, try(group.region, local.digitalocean_default_region))
         image        = try(vm.image, local.digitalocean_default_image)
@@ -136,7 +137,7 @@ resource "digitalocean_vpc" "main" {
 
 resource "digitalocean_droplet" "main" {
   for_each = {
-    for vm in local.digitalocean_vms : "${vm.id}" => vm
+    for vm in local.digitalocean_vms : vm.id => vm
   }
   name        = "${var.ethereum_network}-${each.value.name}"
   region      = each.value.region
@@ -166,23 +167,23 @@ resource "digitalocean_project_resources" "droplets" {
 resource "local_file" "ansible_inventory" {
   content = templatefile("ansible_inventory.tmpl",
     {
-      ethereum_network_name = "${var.ethereum_network}"
+      ethereum_network_name = var.ethereum_network
       groups = merge(
-        { for group in local.digitalocean_vm_groups : "${group.group_name}" => true... },
+        { for group in local.digitalocean_vm_groups : group.group_name => true... },
       )
       hosts = merge(
         {
           for key, server in digitalocean_droplet.main : "do.${key}" => {
-            ip              = "${server.ipv4_address}"
+            ip              = server.ipv4_address
             ipv6            = try(server.ipv6_address, "none")
             group           = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^group_name:", tag))][0], "unknown")
             validator_start = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^val_start:", tag))][0], 0)
             validator_end   = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^val_end:", tag))][0], 0)
             supernode       = try(title([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^supernode:", tag))][0]), "undefined")
-            tags            = "${server.tags}"
-            hostname        = "${split(".", key)[0]}"
+            tags            = server.tags
+            hostname        = split(".", key)[0]
             cloud           = "digitalocean"
-            region          = "${server.region}"
+            region          = server.region
           }
         }
       )

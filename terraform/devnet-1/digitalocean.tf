@@ -22,6 +22,7 @@ variable "digitalocean_fullnode_size" {
 }
 
 variable "digitalocean_regions" {
+  type = any
   default = [
     "nyc1",
     "sgp1",
@@ -56,10 +57,10 @@ locals {
         group_name = node.name
         id         = "${node.name}-${node.start_index + i + 1}"
         vms = {
-          "${i + 1}" = {
+          tostring(i + 1) = {
             # Validator range for this instance
             val_start = node.validator_start + (i * (node.validator_end - node.validator_start) / node.count)
-            val_end   = min(
+            val_end = min(
               node.validator_start + ((i + 1) * (node.validator_end - node.validator_start) / node.count),
               node.validator_end
             )
@@ -83,9 +84,7 @@ locals {
 }
 
 locals {
-  digitalocean_default_region = "ams3"
-  digitalocean_default_size   = var.digitalocean_fullnode_size
-  digitalocean_default_image  = "debian-13-x64"
+  digitalocean_default_image = "debian-13-x64"
   digitalocean_global_tags = [
     "Owner:Devops",
     "EthNetwork:${var.ethereum_network}"
@@ -115,9 +114,9 @@ locals {
           "val_end:${vm.val_end}",
           "supernode:${vm.supernode ? "True" : "False"}",
           "arch:${vm.arch}",
-        ], compact([
-          can(regex("bootnode", group.group_name)) ? "bootnode:${var.ethereum_network}" : null,
-          can(regex("mev-relay", group.group_name)) ? "mev-relay:${var.ethereum_network}" : null
+          ], compact([
+            can(regex("bootnode", group.group_name)) ? "bootnode:${var.ethereum_network}" : null,
+            can(regex("mev-relay", group.group_name)) ? "mev-relay:${var.ethereum_network}" : null
         ]))
       }
     ]

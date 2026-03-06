@@ -23,6 +23,7 @@
 ########################################################################################
 
 variable "nodes" {
+  type        = any
   description = "List of node definitions for the devnet"
   default = [
     { name = "bootnode", count = 1, cloud = "hetzner" },

@@ -5,29 +5,29 @@
 resource "local_file" "ansible_inventory" {
   content = templatefile("ansible_inventory.tmpl",
     {
-      ethereum_network_name = "${var.ethereum_network}"
+      ethereum_network_name = var.ethereum_network
       groups = merge(
-        { for group in local.digitalocean_vm_groups : "${group.group_name}" => true... },
-        { for group in local.hetzner_vm_groups : "${group.group_name}" => true... },
+        { for group in local.digitalocean_vm_groups : group.group_name => true... },
+        { for group in local.hetzner_vm_groups : group.group_name => true... },
       )
       hosts = merge(
         {
           for key, server in digitalocean_droplet.main : "do.${key}" => {
-            ip              = "${server.ipv4_address}"
+            ip              = server.ipv4_address
             ipv6            = try(server.ipv6_address, "none")
             group           = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^group_name:", tag))][0], "unknown")
             validator_start = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^val_start:", tag))][0], 0)
             validator_end   = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^val_end:", tag))][0], 0)
             supernode       = try(title([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^supernode:", tag))][0]), "undefined")
             arch            = try([for tag in tolist(server.tags) : split(":", tag)[1] if can(regex("^arch:", tag))][0], "amd64")
-            tags            = "${server.tags}"
-            hostname        = "${split(".", key)[0]}"
+            tags            = server.tags
+            hostname        = split(".", key)[0]
             cloud           = "digitalocean"
-            region          = "${server.region}"
+            region          = server.region
           }
         },
         {
-          for key, server in hcloud_server.main : "${key}" => {
+          for key, server in hcloud_server.main : key => {
             ip              = coalesce(server.ipv4_address, (try(server.ipv6_address, "")))
             ipv6            = coalesce(server.ipv6_address, "")
             group           = server.labels.group_name
