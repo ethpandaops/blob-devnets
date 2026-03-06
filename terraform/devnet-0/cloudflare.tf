@@ -9,7 +9,7 @@ data "cloudflare_zone" "default" {
 
 resource "cloudflare_record" "server_record_v4" {
   for_each = {
-    for vm in local.digitalocean_vms : "${vm.id}" => vm if can(regex("bootnode", vm.name))
+    for vm in local.digitalocean_vms : vm.id => vm if can(regex("bootnode", vm.name))
   }
   zone_id = data.cloudflare_zone.default.id
   name    = "${each.value.name}.${var.ethereum_network}"
@@ -21,7 +21,7 @@ resource "cloudflare_record" "server_record_v4" {
 
 resource "cloudflare_record" "server_record_v6" {
   for_each = {
-    for vm in local.digitalocean_vms : "${vm.id}" => vm if vm.ipv6 && can(regex("bootnode", vm.name))
+    for vm in local.digitalocean_vms : vm.id => vm if vm.ipv6 && can(regex("bootnode", vm.name))
   }
   zone_id = data.cloudflare_zone.default.id
   name    = "${each.value.name}.${var.ethereum_network}"
@@ -33,7 +33,7 @@ resource "cloudflare_record" "server_record_v6" {
 
 resource "cloudflare_record" "server_record_ns" {
   for_each = {
-    for vm in local.digitalocean_vms : "${vm.id}" => vm if can(regex("bootnode", vm.name))
+    for vm in local.digitalocean_vms : vm.id => vm if can(regex("bootnode", vm.name))
   }
   zone_id = data.cloudflare_zone.default.id
   name    = "srv.${var.ethereum_network}"

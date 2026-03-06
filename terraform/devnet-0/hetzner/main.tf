@@ -2,6 +2,7 @@
 //                            TERRAFORM PROVIDERS & BACKEND
 ////////////////////////////////////////////////////////////////////////////////////////
 terraform {
+  required_version = ">= 1.0"
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
@@ -18,6 +19,14 @@ terraform {
     random = {
       source  = "hashicorp/random"
       version = "3.5.1"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.4"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.2"
     }
   }
 }
@@ -58,6 +67,7 @@ variable "ethereum_network" {
 }
 
 variable "base_cidr_block" {
+  type    = any
   default = "10.222.0.0/16"
 }
 ////////////////////////////////////////////////////////////////////////////////////////

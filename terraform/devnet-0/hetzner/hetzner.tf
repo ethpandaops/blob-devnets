@@ -28,6 +28,7 @@ variable "hetzner_fullnode_size" {
 }
 
 variable "hetzner_regions" {
+  type = any
   default = [
     #"hel1",
     "fsn1"
@@ -58,10 +59,10 @@ locals {
     for vm_group in local.vm_groups :
     [
       for i in range(0, vm_group.count) : {
-        group_name = "${vm_group.name}"
+        group_name = vm_group.name
         id         = "${vm_group.name}-${i + 1}"
         vms = {
-          "${i + 1}" = {
+          tostring(i + 1) = {
             labels = join(",", compact([
               "group_name:${vm_group.name}",
               "val_start:${vm_group.validator_start + (i * (vm_group.validator_end - vm_group.validator_start) / vm_group.count)}",
@@ -96,11 +97,11 @@ locals {
   hcloud_vms = flatten([
     for group in local.hetzner_vm_groups : [
       for vm_key, vm in group.vms : {
-        id        = "${group.id}"
-        group_key = "${group.group_name}"
+        id        = group.id
+        group_key = group.group_name
         vm_key    = vm_key
 
-        name         = try(vm.name, "${group.id}")
+        name         = try(vm.name, group.id)
         ipv4_enabled = try(vm.ipv4_enabled, true)
         ipv6_enabled = try(vm.ipv6_enabled, true)
         ssh_keys     = try(vm.ssh_keys, [data.hcloud_ssh_key.main.id])
@@ -122,7 +123,7 @@ locals {
 # Randomize region selection for each VM
 resource "random_shuffle" "vm_region" {
   for_each = {
-    for vm in local.hcloud_vms : "${vm.id}" => vm
+    for vm in local.hcloud_vms : vm.id => vm
   }
   input        = var.hetzner_regions
   result_count = 1
@@ -148,7 +149,7 @@ data "hcloud_ssh_key" "main" {
 
 resource "hcloud_server" "main" {
   for_each = {
-    for vm in local.hcloud_vms : "${vm.id}" => vm
+    for vm in local.hcloud_vms : vm.id => vm
   }
   name        = "${var.ethereum_network}-${each.value.name}"
   image       = each.value.image
@@ -165,7 +166,7 @@ resource "hcloud_server" "main" {
 
 resource "hcloud_server_network" "main" {
   for_each = {
-    for vm in local.hcloud_vms : "${vm.id}" => vm
+    for vm in local.hcloud_vms : vm.id => vm
   }
   server_id  = hcloud_server.main[each.key].id
   network_id = hcloud_network.main[random_shuffle.vm_region[each.key].result[0]].id
@@ -180,13 +181,13 @@ resource "local_file" "ansible_inventory" {
   depends_on = [hcloud_server.main]
   content = templatefile("../ansible_inventory.tmpl",
     {
-      ethereum_network_name = "${var.ethereum_network}"
+      ethereum_network_name = var.ethereum_network
       groups = merge(
-        { for group in local.hetzner_vm_groups : "${group.group_name}" => true... },
+        { for group in local.hetzner_vm_groups : group.group_name => true... },
       )
       hosts = merge(
         {
-          for key, server in hcloud_server.main : "${key}" => {
+          for key, server in hcloud_server.main : key => {
             ip              = coalesce(server.ipv4_address, (try(server.ipv6_address, "")))
             ipv6            = coalesce(server.ipv6_address, "")
             group           = server.labels.group_name
