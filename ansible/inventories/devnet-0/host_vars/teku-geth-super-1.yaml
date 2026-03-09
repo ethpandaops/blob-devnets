@@ -14,7 +14,7 @@ geth_container_command_extra_args:
   - --rpc.telemetry.instance-id={{ inventory_hostname }}
 
 
-teku_container_image: bbusa/teku:otel
+teku_container_image: ethpandaops/teku:lucassaldanha-engine-api-perf
 
 teku_container_command_extra_args:
   - --network=/network-config/config.yaml
@@ -29,6 +29,8 @@ teku_container_command_extra_args:
   - --metrics-block-timing-tracking-enabled
   - --ignore-weak-subjectivity-period-enabled
   - --rest-api-docs-enabled
-  - --otel-tracing-enabled
-  - --otel-tracing-endpoint={{ tempo_grpcs_url }}
-  - --otel-service-instance-id={{ inventory_hostname }}
+  - --Xnew-engine-api-client-enabled=true
+
+ # - --otel-tracing-enabled
+ # - --otel-tracing-endpoint={{ tempo_grpcs_url }}
+ # - --otel-service-instance-id={{ inventory_hostname }}
