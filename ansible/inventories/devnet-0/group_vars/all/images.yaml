@@ -5,11 +5,11 @@ default_ethereum_client_images:
   nimbus: statusim/nimbus-eth2:multiarch-latest
   prysm: ethpandaops/prysm-beacon-chain:prysm-partial-cells-current
   prysm_validator: ethpandaops/prysm-validator:prysm-partial-cells-current
-  teku: consensys/teku:latest
+  teku: ethpandaops/teku:master
   grandine: ethpandaops/grandine:develop
   ### Execution layer clients
   besu: ethpandaops/besu:main
-  geth: ethpandaops/geth:master
+  geth: ethpandaops/geth:jrhea-test-json-premarshal-blobsbundle
   erigon: ethpandaops/erigon:main
   nethermind: ethpandaops/nethermind:master
   reth: ethpandaops/reth:main
