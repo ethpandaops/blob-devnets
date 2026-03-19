@@ -1,6 +1,11 @@
 ethereum_cl_bootnodes:
   - "{{ hostvars[primary_bootnode]['bootnodoor_fact_enr'] }}"
   - "{{ hostvars[primary_bootnode]['ethereum_node_fact_cl_enr'] }}"
+  - "{{ hostvars['lighthouse-geth-super-1']['ethereum_node_fact_cl_enr'] }}"
+  - "{{ hostvars['lighthouse-geth-super-2']['ethereum_node_fact_cl_enr'] }}"
+  - "{{ hostvars['lighthouse-nimbusel-full-1']['ethereum_node_fact_cl_enr'] }}"
+  - "{{ hostvars['lighthouse-nimbusel-full-2']['ethereum_node_fact_cl_enr'] }}"
+
 
 ethereum_el_bootnodes:
   - "{{ hostvars[primary_bootnode]['bootnodoor_fact_enode'] }}"

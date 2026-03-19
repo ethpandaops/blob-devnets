@@ -47,9 +47,9 @@ variable "lighthouse_nethermind_super" {
   type = any
   default = {
     name            = "lighthouse-nethermind-super"
-    count           = 0
-    validator_start = 0
-    validator_end   = 0
+    count           = 2
+    validator_start = 400
+    validator_end   = 408
   }
 }
 
