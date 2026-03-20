@@ -1,3 +1,9 @@
+prysm_container_env:
+  VIRTUAL_HOST: "{{ ethereum_node_beacon_hostname }}"
+  VIRTUAL_PORT: "{{ ethereum_node_cl_ports_http_beacon | string }}"
+  LETSENCRYPT_HOST: "{{ ethereum_node_beacon_hostname }}"
+  GOLOG_LOG_LEVEL: "pubsub=debug"
+
 prysm_container_command_extra_simple_args:
   - --grpc-gateway-corsdomain=*
   - --chain-config-file=/network-config/config.yaml
