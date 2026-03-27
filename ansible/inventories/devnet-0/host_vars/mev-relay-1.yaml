@@ -90,8 +90,8 @@ mev_relay_website_container_env:
   FULU_FORK_VERSION=0x70{{ ethereum_genesis_fork_version_suffix }}
   DB_TABLE_PREFIX=custom
   LOG_LEVEL=debug
-  API_TIMEOUT_READ_MS=5000 # 5s
-  API_MAX_PAYLOAD_BYTES=41943040 # ~40MiB
+  API_TIMEOUT_READ_MS=5000
+  API_MAX_PAYLOAD_BYTES=41943040
   LINK_DATA_API=http://mev-relay-1.{{ network_server_subdomain }}:9062
   RELAY_URL=http://0xa55c1285d84ba83a5ad26420cd5ad3091e49c55a813eee651cd467db38a8c8e63192f47955e9376f6b42f6d190571cb5@mev-relay-1.{{ network_server_subdomain }}:9062
 mev_relay_website_container_ports:
