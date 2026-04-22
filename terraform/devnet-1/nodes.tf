@@ -23,19 +23,13 @@
 ########################################################################################
 
 variable "nodes" {
-  type        = any
   description = "List of node definitions for the devnet"
   default = [
-    { name = "bootnode", count = 1, cloud = "hetzner" },
-    { name = "mev-relay", count = 1, cloud = "hetzner", size = "cx53", supernode = true },
-    { name = "lighthouse-geth-super", count = 2, cloud = "hetzner", validator_start = 0, validator_end = 8 },
-    { name = "lighthouse-besu-super", count = 2, cloud = "hetzner", validator_start = 8, validator_end = 16 },
-    { name = "prysm-nethermind-super", count = 2, cloud = "hetzner", validator_start = 16, validator_end = 24 },
-    { name = "prysm-reth-super", count = 2, cloud = "hetzner", validator_start = 24, validator_end = 32 },
-    { name = "lighthouse-erigon-full", count = 2, cloud = "hetzner", validator_start = 32, validator_end = 40 },
-    { name = "lighthouse-nimbusel-full", count = 2, cloud = "hetzner", validator_start = 40, validator_end = 48 },
-    { name = "prysm-geth-full", count = 2, cloud = "hetzner", validator_start = 48, validator_end = 56 },
-    { name = "prysm-besu-full", count = 2, cloud = "hetzner", validator_start = 56, validator_end = 64 },
-    { name = "teku-geth-super", count = 2, cloud = "hetzner", validator_start = 64, validator_end = 72 },
+    { name = "bootnode", count = 1, cloud = "digitalocean", region = "ams3" },
+
+    { name = "prysm-geth", count = 22, cloud = "digitalocean", validator_start = 0, validator_end = 220,  region = "ams3" },
+    { name = "prysm-geth-super", count = 3, cloud = "digitalocean", validator_start = 220, validator_end = 1600, supernode = true, region = "ams3" },
+    { name = "prysm-nethermind", count = 22, cloud = "digitalocean", validator_start = 1600, validator_end = 1820, region = "blr1" },
+    { name = "prysm-nethermind-super", count = 3, cloud = "digitalocean", validator_start = 1820, validator_end = 3200, supernode = true, region = "blr1" },
   ]
 }
