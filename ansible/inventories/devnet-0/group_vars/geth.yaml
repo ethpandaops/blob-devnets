@@ -26,6 +26,9 @@ geth_container_command_extra_args:
   - --networkid={{ ethereum_network_id }}
   - --syncmode=full
   - --bootnodes={{ ethereum_el_bootnodes | join(',') }}
+  - --rpc.telemetry
+  - --rpc.telemetry.endpoint={{ tempo_grpcs_url }}
+  - --rpc.telemetry.instance-id={{ ethereum_network_name }}-{{ inventory_hostname }}
 
 geth_container_pull: true
 
