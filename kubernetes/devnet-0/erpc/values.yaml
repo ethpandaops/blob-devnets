@@ -140,6 +140,8 @@ erpc:
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-erigon-full-2.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-geth-super-1.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-geth-super-2.srv.blob-devnet-0.ethpandaops.io
+          - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
+          - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nethermind-super-2.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nimbusel-full-2.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-mev-relay-1.srv.blob-devnet-0.ethpandaops.io
@@ -151,5 +153,3 @@ erpc:
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-nethermind-super-2.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
           - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-reth-super-2.srv.blob-devnet-0.ethpandaops.io
-          - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
-          - endpoint: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io

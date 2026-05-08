@@ -121,15 +121,3 @@
   priority: -1
   archive: false
   engineSnooperUrl: http://rpc-prysm-reth-super-2.srv.blob-devnet-0.ethpandaops.io:8961
-- url: https://rpc-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
-  name: teku-geth-super-1
-  authGroup: pandaops
-  priority: -1
-  archive: false
-  engineSnooperUrl: http://rpc-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io:8961
-- url: https://rpc-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io
-  name: teku-geth-super-2
-  authGroup: pandaops
-  priority: -1
-  archive: false
-  engineSnooperUrl: http://rpc-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io:8961

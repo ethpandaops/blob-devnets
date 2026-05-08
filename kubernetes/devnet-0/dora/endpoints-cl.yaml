@@ -91,12 +91,4 @@
   name: prysm-reth-super-2
   authGroup: pandaops
   priority: -1
-- url: https://bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
-  name: teku-geth-super-1
-  authGroup: pandaops
-  priority: -1
-- url: https://bn-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io
-  name: teku-geth-super-2
-  authGroup: pandaops
-  priority: -1
 

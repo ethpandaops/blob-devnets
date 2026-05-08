@@ -135,6 +135,16 @@ tracoor-single:
             traceDisableMemory: true
             traceDisableStack: true
             traceDisableStorage: true
+      - name: lighthouse-nethermind-super-1
+        ethereum:
+          overrideNetworkName: blob-devnet-0
+          beacon:
+            nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
+          execution:
+            nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-lighthouse-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
+            traceDisableMemory: true
+            traceDisableStack: true
+            traceDisableStorage: true
       - name: lighthouse-nimbusel-full-1
         ethereum:
           overrideNetworkName: blob-devnet-0
@@ -192,16 +202,6 @@ tracoor-single:
             nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
           execution:
             nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-prysm-reth-super-1.srv.blob-devnet-0.ethpandaops.io
-            traceDisableMemory: true
-            traceDisableStack: true
-            traceDisableStorage: true
-      - name: teku-geth-super-1
-        ethereum:
-          overrideNetworkName: blob-devnet-0
-          beacon:
-            nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
-          execution:
-            nodeAddress: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@rpc-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
             traceDisableMemory: true
             traceDisableStack: true
             traceDisableStorage: true
