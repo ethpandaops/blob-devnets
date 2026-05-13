@@ -321,6 +321,7 @@ vector_config: |
 
   [sources.otlp_in]
     type = "opentelemetry"
+    use_otlp_decoding = true
 
   [sources.otlp_in.grpc]
     address = "[::]:4317"
@@ -418,63 +419,16 @@ vector_config: |
       batch.max_events = 1
       batch.timeout_secs = 5
 
-  [transforms.otel_trace_shape]
-    type = "remap"
-    inputs = ["otlp_in.traces"]
-    source = '''
-      ts_start = "0"
-      parsed_start, e1 = parse_timestamp(to_string!(.start_time_unix_nano), "%+")
-      if e1 == null {
-        ts_start = to_string(to_unix_timestamp(parsed_start, unit: "nanoseconds"))
-      }
-      ts_end = "0"
-      parsed_end, e2 = parse_timestamp(to_string!(.end_time_unix_nano), "%+")
-      if e2 == null {
-        ts_end = to_string(to_unix_timestamp(parsed_end, unit: "nanoseconds"))
-      }
-
-      resource_attrs = []
-      for_each(object!(.resources)) -> |k, v| {
-        resource_attrs = push(resource_attrs, {"key": k, "value": {"stringValue": to_string(v) ?? ""}})
-      }
-      span_attrs = []
-      for_each(object!(.attributes)) -> |k, v| {
-        span_attrs = push(span_attrs, {"key": k, "value": {"stringValue": to_string(v) ?? ""}})
-      }
-
-      # Reduce can't batch trace events (logs only), so emit the OTLP envelope
-      # in-place — one POST per span. Acceptable for current bootnode volume.
-      . = {
-        "resourceSpans": [{
-          "resource": {"attributes": resource_attrs},
-          "scopeSpans": [{
-            "scope": {"name": "vector-trace-bridge"},
-            "spans": [{
-              "traceId":           to_string!(.trace_id),
-              "spanId":            to_string!(.span_id),
-              "parentSpanId":      to_string(.parent_span_id) ?? "",
-              "name":              to_string!(.name),
-              "kind":              .kind,
-              "startTimeUnixNano": ts_start,
-              "endTimeUnixNano":   ts_end,
-              "attributes":        span_attrs,
-              "status":            .status
-            }]
-          }]
-        }]
-      }
-    '''
-
   [sinks.otlp_traces]
-    type = "http"
-    inputs = ["otel_trace_shape"]
-    uri = "{{ otlp_traces_endpoint }}"
-    method = "post"
-    encoding.codec = "json"
-    framing.method = "bytes"
-    request.headers.Content-Type = "application/json"
-    auth.strategy = "basic"
-    auth.user = "{{ secret_loki.username }}"
-    auth.password = "{{ secret_loki.password }}"
-    batch.max_events = 1
-    batch.timeout_secs = 5
+    type = "opentelemetry"
+    inputs = ["otlp_in.traces"]
+    [sinks.otlp_traces.protocol]
+      type = "http"
+      uri = "{{ otlp_traces_endpoint }}"
+      method = "post"
+      encoding.codec = "otlp"
+      auth.strategy = "basic"
+      auth.user = "{{ secret_loki.username }}"
+      auth.password = "{{ secret_loki.password }}"
+      batch.max_events = 1
+      batch.timeout_secs = 5
