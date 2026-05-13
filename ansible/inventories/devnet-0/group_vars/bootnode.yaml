@@ -60,6 +60,9 @@ lighthouse_container_volumes:
 lighthouse_container_command_extra_args:
   - --testnet-dir=/network-config
   - --enable-partial-columns
+  # OTLP traces → local Vector sidecar (gRPC).
+  - --telemetry-collector-url=http://vector:4317
+  - --telemetry-service-name=lighthouse-bn-{{ ethereum_network_name }}-{{ inventory_hostname }}
   - >-
     --boot-nodes={{
       (
@@ -99,6 +102,10 @@ geth_container_command_extra_args:
   - --syncmode=full
   - --gcmode=archive
   - --state.scheme=hash
+  # OTLP traces → local Vector sidecar (handles upstream auth + endpoint).
+  - --rpc.telemetry
+  - --rpc.telemetry.endpoint=http://vector:4318/v1/traces
+  - --rpc.telemetry.instance-id={{ ethereum_network_name }}-{{ inventory_hostname }}
   - >-
     --bootnodes={{
       (

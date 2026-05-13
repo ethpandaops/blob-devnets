@@ -298,10 +298,15 @@ docker_nginx_proxy_wildcard_cert_url: "http://cert.{{ network_server_subdomain }
 docker_nginx_proxy_wildcard_cert_psk: "{{ secret_cert_encryption_psk }}"
 
 # role: ethpandaops.general.vector
-# Dual-write to platform's ClickHouse logs-external pipeline.
-# Reuses secret_loki credentials (same VMAuth backend fronts both ingresses).
-clickhouse_logs_enabled: true
-clickhouse_logs_endpoint: "https://clickhouse-logs.analytics.production.platform.ethpandaops.io"
+# OTLP-direct path into platform's observability pipeline.
+# Reuses secret_loki credentials (same vmauth backend serves both ingresses).
+otlp_logs_endpoint: "https://otlp.analytics.staging.platform.ethpandaops.io/v1/logs"
+otlp_traces_endpoint: "https://otlp.analytics.staging.platform.ethpandaops.io/v1/traces"
+otlp_logs_deployment_env: staging
+
+# Put Vector on the shared docker network so other containers (geth, etc)
+# can reach it by name (vector:4318) for OTLP submission.
+vector_container_networks: "{{ docker_networks_shared }}"
 vector_config: |
   [sources.in]
     type = "docker_logs"
@@ -313,6 +318,15 @@ vector_config: |
       "prometheus",
       "snooper-",
     ]
+
+  [sources.otlp_in]
+    type = "opentelemetry"
+
+  [sources.otlp_in.grpc]
+    address = "[::]:4317"
+
+  [sources.otlp_in.http]
+    address = "[::]:4318"
 
   [sinks.out]
     type = "loki"
@@ -335,34 +349,132 @@ vector_config: |
     auth.strategy = "basic"
     auth.user = "{{ secret_loki.username }}"
     auth.password = "{{ secret_loki.password }}"
-  {%- if clickhouse_logs_enabled | default(false) +%}
 
-  [transforms.clickhouse_shape]
+  [transforms.otel_shape]
     type = "remap"
     inputs = ["in"]
     source = '''
-      .IngressUser = "{{ secret_loki.username }}"
-      .Namespace   = ""
-      .Pod         = ""
-      .Container   = string(.container_name) ?? ""
-      .Node        = "{{ inventory_hostname }}"
-      .Stream      = string(.stream) ?? ""
-      .Message     = string(.message) ?? ""
-      .Timestamp   = .timestamp
-      del(.container_name); del(.container_id); del(.container_created_at)
-      del(.image); del(.host); del(.label); del(.source_type)
-      del(.stream); del(.message); del(.timestamp)
+      ts_ns = to_string(to_unix_timestamp(now(), unit: "nanoseconds"))
+      if is_timestamp(.timestamp) {
+        ts_ns = to_string(to_unix_timestamp!(.timestamp, unit: "nanoseconds"))
+      }
+      msg  = string(.message)         ?? ""
+      ctr  = string(.container_name)  ?? "unknown"
+      strm = string(.stream)          ?? "stdout"
+      . = {
+        "resource_log": {
+          "resource": {
+            "attributes": [
+              {"key": "service.name",           "value": {"stringValue": ctr}},
+              {"key": "deployment.environment", "value": {"stringValue": "{{ otlp_logs_deployment_env }}"}},
+              {"key": "ingress_user",           "value": {"stringValue": "{{ secret_loki.username }}"}},
+              {"key": "network",                "value": {"stringValue": "{{ ethereum_network_name }}"}},
+              {"key": "host.name",              "value": {"stringValue": "{{ inventory_hostname }}"}}
+            ]
+          },
+          "scopeLogs": [{
+            "scope": {"name": "blob-devnets-vector"},
+            "logRecords": [{
+              "timeUnixNano":   ts_ns,
+              "severityNumber": 9,
+              "severityText":   "INFO",
+              "body": {"stringValue": msg},
+              "attributes": [
+                {"key": "stream",       "value": {"stringValue": strm}},
+                {"key": "ingress_user", "value": {"stringValue": "{{ secret_loki.username }}"}}
+              ]
+            }]
+          }]
+        }
+      }
     '''
 
-  [sinks.clickhouse_logs]
+  [transforms.batch_envelope]
+    type = "reduce"
+    inputs = ["otel_shape"]
+    expire_after_ms = 30000
+    end_every_period_ms = 5000
+    max_events = 500
+    merge_strategies.resource_log = "array"
+
+  [transforms.finalize_envelope]
+    type = "remap"
+    inputs = ["batch_envelope"]
+    source = '''
+      . = {"resourceLogs": .resource_log}
+    '''
+
+  [sinks.otlp]
+    type = "opentelemetry"
+    inputs = ["finalize_envelope"]
+    [sinks.otlp.protocol]
+      type = "http"
+      uri = "{{ otlp_logs_endpoint }}"
+      method = "post"
+      encoding.codec = "otlp"
+      auth.strategy = "basic"
+      auth.user = "{{ secret_loki.username }}"
+      auth.password = "{{ secret_loki.password }}"
+      batch.max_events = 1
+      batch.timeout_secs = 5
+
+  [transforms.otel_trace_shape]
+    type = "remap"
+    inputs = ["otlp_in.traces"]
+    source = '''
+      ts_start = "0"
+      parsed_start, e1 = parse_timestamp(to_string!(.start_time_unix_nano), "%+")
+      if e1 == null {
+        ts_start = to_string(to_unix_timestamp(parsed_start, unit: "nanoseconds"))
+      }
+      ts_end = "0"
+      parsed_end, e2 = parse_timestamp(to_string!(.end_time_unix_nano), "%+")
+      if e2 == null {
+        ts_end = to_string(to_unix_timestamp(parsed_end, unit: "nanoseconds"))
+      }
+
+      resource_attrs = []
+      for_each(object!(.resources)) -> |k, v| {
+        resource_attrs = push(resource_attrs, {"key": k, "value": {"stringValue": to_string(v) ?? ""}})
+      }
+      span_attrs = []
+      for_each(object!(.attributes)) -> |k, v| {
+        span_attrs = push(span_attrs, {"key": k, "value": {"stringValue": to_string(v) ?? ""}})
+      }
+
+      # Reduce can't batch trace events (logs only), so emit the OTLP envelope
+      # in-place — one POST per span. Acceptable for current bootnode volume.
+      . = {
+        "resourceSpans": [{
+          "resource": {"attributes": resource_attrs},
+          "scopeSpans": [{
+            "scope": {"name": "vector-trace-bridge"},
+            "spans": [{
+              "traceId":           to_string!(.trace_id),
+              "spanId":            to_string!(.span_id),
+              "parentSpanId":      to_string(.parent_span_id) ?? "",
+              "name":              to_string!(.name),
+              "kind":              .kind,
+              "startTimeUnixNano": ts_start,
+              "endTimeUnixNano":   ts_end,
+              "attributes":        span_attrs,
+              "status":            .status
+            }]
+          }]
+        }]
+      }
+    '''
+
+  [sinks.otlp_traces]
     type = "http"
-    inputs = ["clickhouse_shape"]
-    uri = "{{ clickhouse_logs_endpoint }}"
+    inputs = ["otel_trace_shape"]
+    uri = "{{ otlp_traces_endpoint }}"
     method = "post"
     encoding.codec = "json"
+    framing.method = "bytes"
+    request.headers.Content-Type = "application/json"
     auth.strategy = "basic"
     auth.user = "{{ secret_loki.username }}"
     auth.password = "{{ secret_loki.password }}"
-    batch.max_events = 5000
-    batch.timeout_secs = 3
-  {%- endif +%}
+    batch.max_events = 1
+    batch.timeout_secs = 5
