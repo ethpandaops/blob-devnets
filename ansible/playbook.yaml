@@ -33,6 +33,8 @@
       tags: [init-server, prometheus]
     - role: otelcol_contrib
       tags: [init-server, otelcol]
+    - role: ethpandaops.general.vector
+      tags: [init-server, vector]
 
 - name: Configure DNS server
   hosts: dns_server

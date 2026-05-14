@@ -303,6 +303,44 @@ otlp_endpoint: "https://otlp.analytics.staging.platform.ethpandaops.io"
 otlp_deployment_env: staging
 
 otelcol_container_networks: "{{ docker_networks_shared }}"
+
+# Vector kept alongside otelcol just to ship logs to Loki. Will be removed
+# when Loki path is replaced (e.g. central aggregator or Loki OTLP support).
+vector_container_networks: "{{ docker_networks_shared }}"
+vector_config: |
+  [sources.in]
+    type = "docker_logs"
+    exclude_containers = [
+      "{{ vector_container_name }}",
+      "otelcol",
+      "ethereum-metrics-exporter",
+      "nginx-proxy",
+      "node_exporter",
+      "prometheus",
+      "snooper-",
+    ]
+
+  [sinks.loki]
+    type = "loki"
+    inputs = ["in"]
+    out_of_order_action = "accept"
+    labels.forwarder = "vector"
+    labels.instance = "{{ inventory_hostname }}"
+    labels.network = "{{ ethereum_network_name }}"
+    labels.testnet = "{{ ethereum_network_name }}"
+    labels.ingress_user = "{{ secret_loki.username }}"
+    labels.container_name = "{{ '{{ container_name }}' }}"
+  {%- if ethereum_node_el is defined +%}
+    labels.ethereum_el = "{{ ethereum_node_el }}"
+  {%- endif +%}
+  {%- if ethereum_node_cl is defined +%}
+    labels.ethereum_cl = "{{ ethereum_node_cl }}"
+  {%- endif +%}
+    encoding.codec = "json"
+    endpoint = "{{ secret_loki.endpoint }}"
+    auth.strategy = "basic"
+    auth.user = "{{ secret_loki.username }}"
+    auth.password = "{{ secret_loki.password }}"
 otelcol_config: |
   extensions:
     basicauth/client:
@@ -326,12 +364,12 @@ otelcol_config: |
           on_error: send
           severity:
             parse_from: attributes.level
+            overwrite_text: true
             mapping:
-              error: [ERROR, error, CRITICAL, FATAL, fatal, critical]
-              warn:  [WARN, warn, WARNING, warning]
-              info:  [INFO, info]
-              debug: [DEBUG, debug]
-              trace: [TRACE, trace]
+              fatal4: [emergency, emerg]
+              fatal3: [alert]
+              fatal2: [critical, crit]
+              fatal:  [panic]
 
     otlp:
       protocols:
