@@ -416,6 +416,9 @@ vector_config: |
       auth.strategy = "basic"
       auth.user = "{{ secret_loki.username }}"
       auth.password = "{{ secret_loki.password }}"
+      # One Vector event here is already a full OTLP envelope (built upstream
+      # by the reduce). max_events MUST be 1 — OTLP/HTTP allows one envelope
+      # per request; >1 would concatenate envelopes into invalid wire bytes.
       batch.max_events = 1
       batch.timeout_secs = 5
 
@@ -430,5 +433,8 @@ vector_config: |
       auth.strategy = "basic"
       auth.user = "{{ secret_loki.username }}"
       auth.password = "{{ secret_loki.password }}"
+      # With use_otlp_decoding on the source, one Vector event already carries
+      # the full client batch (~100-500 spans from Lighthouse's BatchSpanProcessor).
+      # max_events MUST be 1 — OTLP/HTTP allows one envelope per request.
       batch.max_events = 1
       batch.timeout_secs = 5
