@@ -400,6 +400,11 @@ otelcol_config: |
       auth:
         authenticator: basicauth/client
 
+    # Dual-write traces to existing Tempo via gRPC. Tempo's URL embeds a
+    # tenant UUID — no separate auth needed.
+    otlp/tempo:
+      endpoint: "{{ tempo_grpcs_url | regex_replace('^grpcs?://', '') }}"
+
   service:
     extensions: [basicauth/client]
     pipelines:
@@ -410,5 +415,5 @@ otelcol_config: |
       traces:
         receivers: [otlp]
         processors: [resource, batch]
-        exporters: [otlphttp/staging]
+        exporters: [otlphttp/staging, otlp/tempo]
 
