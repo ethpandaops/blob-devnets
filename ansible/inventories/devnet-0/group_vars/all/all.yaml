@@ -299,10 +299,10 @@ docker_nginx_proxy_wildcard_cert_psk: "{{ secret_cert_encryption_psk }}"
 
 # role: otelcol_contrib (local role)
 # Reuses secret_loki credentials (same vmauth backend serves both ingresses).
-otlp_endpoint: "https://otlp.analytics.staging.platform.ethpandaops.io"
-otlp_deployment_env: staging
+otlp_endpoint: "https://otlp.analytics.production.platform.ethpandaops.io"
+otlp_deployment_env: production
 
-otelcol_container_networks: "{{ docker_networks_shared }}"
+otelcol_contrib_container_networks: "{{ docker_networks_shared }}"
 
 # Vector kept alongside otelcol just to ship logs to Loki. Will be removed
 # when Loki path is replaced (e.g. central aggregator or Loki OTLP support).
@@ -341,7 +341,7 @@ vector_config: |
     auth.strategy = "basic"
     auth.user = "{{ secret_loki.username }}"
     auth.password = "{{ secret_loki.password }}"
-otelcol_config: |
+otelcol_contrib_config: |
   extensions:
     basicauth/client:
       client_auth:

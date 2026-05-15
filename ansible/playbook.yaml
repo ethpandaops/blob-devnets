@@ -31,7 +31,7 @@
       tags: [init-server, node_exporter]
     - role: ethpandaops.general.prometheus
       tags: [init-server, prometheus]
-    - role: otelcol_contrib
+    - role: ethpandaops.general.otelcol_contrib
       tags: [init-server, otelcol]
     - role: ethpandaops.general.vector
       tags: [init-server, vector]
