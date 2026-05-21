@@ -9,7 +9,7 @@ default_ethereum_client_images:
   grandine: ethpandaops/grandine:develop
   ### Execution layer clients
   besu: ethpandaops/besu:main
-  geth: ethpandaops/geth:MariusVanDerWijden-has-blobs
+  geth: ethpandaops/geth:master
   erigon: ethpandaops/erigon:main
   nethermind: ethpandaops/nethermind:master
   reth: ethpandaops/reth:main
