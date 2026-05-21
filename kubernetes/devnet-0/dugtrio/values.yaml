@@ -51,6 +51,10 @@ dugtrio:
     name: lighthouse-geth-super-1
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-geth-super-2.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-geth-super-2
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nethermind-super-1.srv.blob-devnet-0.ethpandaops.io
+    name: lighthouse-nethermind-super-1
+  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nethermind-super-2.srv.blob-devnet-0.ethpandaops.io
+    name: lighthouse-nethermind-super-2
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nimbusel-full-1.srv.blob-devnet-0.ethpandaops.io
     name: lighthouse-nimbusel-full-1
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-lighthouse-nimbusel-full-2.srv.blob-devnet-0.ethpandaops.io
@@ -73,7 +77,3 @@ dugtrio:
     name: prysm-reth-super-1
   - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-prysm-reth-super-2.srv.blob-devnet-0.ethpandaops.io
     name: prysm-reth-super-2
-  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-1.srv.blob-devnet-0.ethpandaops.io
-    name: teku-geth-super-1
-  - url: https://<path:/secrets/services/services.enc.yaml#ethereum | jsonPath {.testnets.blob-devnets.node_ingress.combined}>@bn-teku-geth-super-2.srv.blob-devnet-0.ethpandaops.io
-    name: teku-geth-super-2

@@ -46,6 +46,8 @@ lighthouse_container_command_extra_args:
   - --boot-nodes={{ ethereum_cl_bootnodes | join(',') }}
   - --debug-level=debug
   - --enable-partial-columns
+  - --telemetry-collector-url=http://otelcol:4317
+  - --telemetry-service-name={{ ethereum_network_name }}-{{ inventory_hostname }}
 lighthouse_validator_container_volumes:
   - "{{ lighthouse_validator_datadir }}:/validator-data"
   - "{{ eth_testnet_config_dir }}:/network-config:ro"

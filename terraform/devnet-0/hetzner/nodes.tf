@@ -271,7 +271,7 @@ variable "teku_geth_super" {
   type = any
   default = {
     name            = "teku-geth-super"
-    count           = 2
+    count           = 0
     validator_start = 64
     validator_end   = 72
   }
