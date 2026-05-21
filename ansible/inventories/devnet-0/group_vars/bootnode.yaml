@@ -68,7 +68,7 @@ lighthouse_container_command_extra_args:
       (
         (
           groups['bootnode']
-          | map('extract', hostvars, ['ethereum_node_fact_cl_enr'])
+          | map('extract', hostvars, ['ethereum_node_fact_discovery_cl_enr'])
           | select('defined')
           | list
         )
@@ -111,7 +111,7 @@ geth_container_command_extra_args:
       (
         (
           groups['bootnode']
-          | map('extract', hostvars, ['ethereum_node_fact_el_enode'])
+          | map('extract', hostvars, ['ethereum_node_fact_discovery_el_enode'])
           | select('defined')
           | list
         )
