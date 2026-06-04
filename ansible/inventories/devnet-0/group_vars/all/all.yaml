@@ -474,6 +474,3 @@ vector_config: |
       # use_otlp_decoding => one event already carries the client's full span batch.
       batch.max_events = 1
       batch.timeout_secs = 5
-# Edge telemetry consolidated onto Vector (docker_logs + OTLP traces -> prod OTLP).
-# otelcol-contrib is no longer used at the edge; the role removes its container.
-otelcol_contrib_cleanup: true
