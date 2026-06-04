@@ -380,9 +380,18 @@ otelcol_contrib_config: |
     resource:
       attributes:
         - {key: deployment.environment, value: "{{ otlp_deployment_env }}", action: upsert}
+        - {key: forwarder,              value: "otelcol", action: upsert}
         - {key: network,                value: "{{ ethereum_network_name }}", action: upsert}
+        - {key: testnet,                value: "{{ ethereum_network_name }}", action: upsert}
+        - {key: instance,               value: "{{ inventory_hostname }}", action: upsert}
         - {key: ingress_user,           value: "{{ secret_loki.username }}", action: upsert}
         - {key: host.name,              value: "{{ inventory_hostname }}", action: upsert}
+      {%- if ethereum_node_cl is defined +%}
+        - {key: ethereum_cl,            value: "{{ ethereum_node_cl }}", action: upsert}
+      {%- endif +%}
+      {%- if ethereum_node_el is defined +%}
+        - {key: ethereum_el,            value: "{{ ethereum_node_el }}", action: upsert}
+      {%- endif +%}
 
     transform/service_name:
       log_statements:
