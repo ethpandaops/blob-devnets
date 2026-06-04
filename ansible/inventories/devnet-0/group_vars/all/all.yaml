@@ -297,12 +297,13 @@ docker_nginx_proxy_wildcard_cert: "{{ network_server_subdomain }}"
 docker_nginx_proxy_wildcard_cert_url: "http://cert.{{ network_server_subdomain }}/{{ network_server_subdomain }}-latest.tar.enc"
 docker_nginx_proxy_wildcard_cert_psk: "{{ secret_cert_encryption_psk }}"
 
-# role: otelcol_contrib (local role)
-# Reuses secret_loki credentials (same vmauth backend serves both ingresses).
+# OTLP egress to the prod analytics gateway (shared by Vector's logs + traces sinks).
+# Ingress identity (auth username + ingress_user tag) is the current devnet name
+# rather than secret_loki.username: the sops username drifts stale between devnet
+# iterations, while the gateway only validates the (constant) password — so using
+# the network name keeps log/trace attribution correct no matter what sops holds.
 otlp_endpoint: "https://otlp.analytics.production.platform.ethpandaops.io"
 otlp_deployment_env: production
-
-otelcol_contrib_container_networks: "{{ docker_networks_shared }}"
 
 # Shared docker network so the clients can reach Vector's OTLP listeners and
 # Vector can read the other containers' logs.
@@ -398,7 +399,7 @@ vector_config: |
         {"key": "container.image.name",   "value": {"stringValue": img}},
         {"key": "deployment.environment", "value": {"stringValue": "{{ otlp_deployment_env }}"}},
         {"key": "forwarder",              "value": {"stringValue": "vector"}},
-        {"key": "ingress_user",           "value": {"stringValue": "{{ secret_loki.username }}"}},
+        {"key": "ingress_user",           "value": {"stringValue": "{{ ethereum_network_name }}"}},
         {"key": "network",                "value": {"stringValue": "{{ ethereum_network_name }}"}},
         {"key": "testnet",                "value": {"stringValue": "{{ ethereum_network_name }}"}},
         {"key": "instance",               "value": {"stringValue": "{{ inventory_hostname }}"}},
@@ -452,7 +453,7 @@ vector_config: |
       method = "post"
       encoding.codec = "otlp"
       auth.strategy = "basic"
-      auth.user = "{{ secret_loki.username }}"
+      auth.user = "{{ ethereum_network_name }}"
       auth.password = "{{ secret_loki.password }}"
       # One event here is already a full OTLP envelope (built by the reduce above).
       # max_events MUST be 1 — OTLP/HTTP allows one envelope per request.
@@ -468,7 +469,7 @@ vector_config: |
       method = "post"
       encoding.codec = "otlp"
       auth.strategy = "basic"
-      auth.user = "{{ secret_loki.username }}"
+      auth.user = "{{ ethereum_network_name }}"
       auth.password = "{{ secret_loki.password }}"
       # use_otlp_decoding => one event already carries the client's full span batch.
       batch.max_events = 1
@@ -476,89 +477,3 @@ vector_config: |
 # Edge telemetry consolidated onto Vector (docker_logs + OTLP traces -> prod OTLP).
 # otelcol-contrib is no longer used at the edge; the role removes its container.
 otelcol_contrib_cleanup: true
-
-otelcol_contrib_config: |
-  extensions:
-    basicauth/client:
-      client_auth:
-        username: {{ secret_loki.username }}
-        password: {{ secret_loki.password }}
-
-  receivers:
-    filelog:
-      include: [/var/lib/docker/containers/*/*-json.log]
-      include_file_path: true
-      start_at: end
-      operators:
-        - type: container
-          format: docker
-          add_metadata_from_filepath: true
-        - type: filter
-          expr: '(attributes["container.name"] != nil and attributes["container.name"] matches "^(otelcol|ethereum-metrics-exporter|nginx-proxy|node_exporter|prometheus|snooper-.*)$") or body matches "github\\.com/open-telemetry/opentelemetry-collector-contrib|otelcol-contrib"'
-        - type: json_parser
-          if: 'body matches "^\\s*\\{"'
-          on_error: send
-          severity:
-            parse_from: attributes.level
-            overwrite_text: true
-            mapping:
-              fatal4: [emergency, emerg]
-              fatal3: [alert]
-              fatal2: [critical, crit]
-              fatal:  [panic]
-
-    otlp:
-      protocols:
-        grpc: {endpoint: "[::]:4317"}
-        http: {endpoint: "[::]:4318"}
-
-  processors:
-    resource:
-      attributes:
-        - {key: deployment.environment, value: "{{ otlp_deployment_env }}", action: upsert}
-        - {key: forwarder,              value: "otelcol", action: upsert}
-        - {key: network,                value: "{{ ethereum_network_name }}", action: upsert}
-        - {key: testnet,                value: "{{ ethereum_network_name }}", action: upsert}
-        - {key: instance,               value: "{{ inventory_hostname }}", action: upsert}
-        - {key: ingress_user,           value: "{{ secret_loki.username }}", action: upsert}
-        - {key: host.name,              value: "{{ inventory_hostname }}", action: upsert}
-      {%- if ethereum_node_cl is defined +%}
-        - {key: ethereum_cl,            value: "{{ ethereum_node_cl }}", action: upsert}
-      {%- endif +%}
-      {%- if ethereum_node_el is defined +%}
-        - {key: ethereum_el,            value: "{{ ethereum_node_el }}", action: upsert}
-      {%- endif +%}
-
-    transform/service_name:
-      log_statements:
-        - context: resource
-          statements:
-            - set(attributes["service.name"], attributes["container.name"]) where attributes["container.name"] != nil
-
-    batch:
-      send_batch_size: 500
-      timeout: 5s
-
-  exporters:
-    otlphttp/staging:
-      endpoint: "{{ otlp_endpoint }}"
-      auth:
-        authenticator: basicauth/client
-
-    # Dual-write traces to existing Tempo via gRPC. Tempo's URL embeds a
-    # tenant UUID — no separate auth needed.
-    otlp/tempo:
-      endpoint: "{{ tempo_grpcs_url | regex_replace('^grpcs?://', '') }}"
-
-  service:
-    extensions: [basicauth/client]
-    pipelines:
-      logs:
-        receivers: [filelog, otlp]
-        processors: [resource, transform/service_name, batch]
-        exporters: [otlphttp/staging]
-      traces:
-        receivers: [otlp]
-        processors: [resource, batch]
-        exporters: [otlphttp/staging, otlp/tempo]
-
