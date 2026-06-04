@@ -304,8 +304,8 @@ otlp_deployment_env: production
 
 otelcol_contrib_container_networks: "{{ docker_networks_shared }}"
 
-# Vector kept alongside otelcol just to ship logs to Loki. Will be removed
-# when Loki path is replaced (e.g. central aggregator or Loki OTLP support).
+# Shared docker network so the clients can reach Vector's OTLP listeners and
+# Vector can read the other containers' logs.
 vector_container_networks: "{{ docker_networks_shared }}"
 vector_config: |
   # Docker container logs (clean per-container metadata straight from the Docker API)
@@ -346,6 +346,41 @@ vector_config: |
       ctr  = string(.container_name) ?? "unknown"
       img  = string(.image)          ?? ""
       strm = string(.stream)         ?? "stdout"
+
+      # Extract the source log level: logfmt (level=xxx) if present, else a level
+      # token near the start. Client formats vary (lighthouse truncates to 4
+      # chars: DEBG/ERRO/CRIT), so match a union of forms. SeverityText keeps the
+      # source's exact text; only SeverityNumber is normalised to the OTel scale
+      # (https://opentelemetry.io/docs/specs/otel/logs/data-model/#field-severitynumber).
+      # Unrecognised lines are left unset rather than guessed.
+      sevtext = ""
+      lm = parse_regex(msg, r'(?i)\b(?:level|lvl|severity)="?(?P<l>[a-z]+)') ?? {}
+      if is_string(lm.l) {
+        sevtext = string!(lm.l)
+      } else {
+        hm = parse_regex(truncate(msg, 48), r'(?i)\b(?P<l>TRACE|DEBUG|DEBG|DBUG|NOTICE|INFO|WARNING|WARN|ERROR|ERRO|CRITICAL|CRIT|FATAL|PANIC)\b') ?? {}
+        if is_string(hm.l) {
+          sevtext = string!(hm.l)
+        }
+      }
+      lvl = upcase(sevtext)
+      sevnum = 0
+      if lvl == "TRACE" {
+        sevnum = 1
+      } else if lvl == "DEBUG" || lvl == "DEBG" || lvl == "DBUG" {
+        sevnum = 5
+      } else if lvl == "INFO" || lvl == "INFOR" || lvl == "NOTICE" {
+        sevnum = 9
+      } else if lvl == "WARN" || lvl == "WARNING" {
+        sevnum = 13
+      } else if lvl == "ERROR" || lvl == "ERRO" {
+        sevnum = 17
+      } else if lvl == "CRIT" || lvl == "CRITICAL" {
+        sevnum = 18
+      } else if lvl == "FATAL" || lvl == "PANIC" {
+        sevnum = 21
+      }
+
       attrs = [
         {"key": "service.name",           "value": {"stringValue": ctr}},
         {"key": "container.name",         "value": {"stringValue": ctr}},
@@ -371,8 +406,8 @@ vector_config: |
             "scope": {"name": "blob-devnets-vector"},
             "logRecords": [{
               "timeUnixNano":   ts_ns,
-              "severityNumber": 9,
-              "severityText":   "INFO",
+              "severityNumber": sevnum,
+              "severityText":   sevtext,
               "body": {"stringValue": msg},
               "attributes": [{"key": "stream", "value": {"stringValue": strm}}]
             }]
