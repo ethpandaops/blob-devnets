@@ -347,20 +347,31 @@ vector_config: |
       img  = string(.image)          ?? ""
       strm = string(.stream)         ?? "stdout"
 
-      # Extract the source log level: logfmt (level=xxx) if present, else a level
-      # token near the start. Client formats vary (lighthouse truncates to 4
-      # chars: DEBG/ERRO/CRIT), so match a union of forms. SeverityText keeps the
-      # source's exact text; only SeverityNumber is normalised to the OTel scale
-      # (https://opentelemetry.io/docs/specs/otel/logs/data-model/#field-severitynumber).
+      # Extract the source log level: JSON-structured lines (.level / .severity)
+      # first, then logfmt (level=xxx), then a level token near the start of a
+      # plain-text line. Client formats vary (lighthouse truncates to 4 chars:
+      # DEBG/ERRO/CRIT), so the text matcher allows a union of forms. SeverityText
+      # keeps the source's exact text; only SeverityNumber is normalised to the
+      # OTel scale (https://opentelemetry.io/docs/specs/otel/logs/data-model/#field-severitynumber).
       # Unrecognised lines are left unset rather than guessed.
       sevtext = ""
-      lm = parse_regex(msg, r'(?i)\b(?:level|lvl|severity)="?(?P<l>[a-z]+)') ?? {}
-      if is_string(lm.l) {
-        sevtext = string!(lm.l)
-      } else {
-        hm = parse_regex(truncate(msg, 48), r'(?i)\b(?P<l>TRACE|DEBUG|DEBG|DBUG|NOTICE|INFO|WARNING|WARN|ERROR|ERRO|CRITICAL|CRIT|FATAL|PANIC)\b') ?? {}
-        if is_string(hm.l) {
-          sevtext = string!(hm.l)
+      if starts_with(msg, "{") {
+        j = parse_json(msg) ?? {}
+        if is_string(j.level) {
+          sevtext = string!(j.level)
+        } else if is_string(j.severity) {
+          sevtext = string!(j.severity)
+        }
+      }
+      if sevtext == "" {
+        lm = parse_regex(msg, r'(?i)\b(?:level|lvl|severity)="?(?P<l>[a-z]+)') ?? {}
+        if is_string(lm.l) {
+          sevtext = string!(lm.l)
+        } else {
+          hm = parse_regex(truncate(msg, 48), r'(?i)\b(?P<l>TRACE|DEBUG|DEBG|DBUG|NOTICE|INFO|WARNING|WARN|ERROR|ERRO|CRITICAL|CRIT|FATAL|PANIC)\b') ?? {}
+          if is_string(hm.l) {
+            sevtext = string!(hm.l)
+          }
         }
       }
       lvl = upcase(sevtext)
