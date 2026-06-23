@@ -1,15 +1,9 @@
 # role: ethpandaops.general.bootstrap
-bootstrap_default_user_authorized_keys_github_team_cl:
-  - kasey
-  - terencechain
-  - potuz
-  - nisdas
-  - prestonvanloon
-  - rkapka
-  - nalepae
-  - james-prysm
+prysm_extra_github_users:  # handles not yet in the coredevs registry
   - marcopolo
-  - aarshkshah1992
+bootstrap_default_user_authorized_keys_github_team_cl: >-
+  {{ (query('ethpandaops.general.url_cached', coredevs_api_url ~ '/api/v1/users/prysm?format=txt') | select | list)
+     + prysm_extra_github_users }}
 
 # role: validator_keys
 validator_keys_sync_files:
