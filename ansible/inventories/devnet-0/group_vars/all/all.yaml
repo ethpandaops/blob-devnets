@@ -180,7 +180,7 @@ ethereum_node_json_rpc_snooper_engine_container_env:
   SNOOPER_XATU_NAME: "{{ ethereum_network_name }}-{{ inventory_hostname }}"
   SNOOPER_XATU_NETWORK_NAME: "{{ ethereum_network_name }}"
   SNOOPER_XATU_NETWORK_ID: "{{ ethereum_network_id }}"
-  SNOOPER_XATU_OUTPUTS: "xatu:{{ secret_xatu_sentry.server_address }}"
+  SNOOPER_XATU_OUTPUTS: "xatu:{{ ethereum_network_name }}-ingest.xatu.ethpandaops.io:443"
   SNOOPER_XATU_TLS: "true"
   SNOOPER_XATU_HEADERS: "authorization=Basic {{ (secret_xatu_sentry.user + ':' + secret_xatu_sentry.password) | b64encode }}"
   SNOOPER_XATU_MAX_QUEUE_SIZE: "51200"
